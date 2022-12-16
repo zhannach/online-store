@@ -1,0 +1,90 @@
+$main-color: #F6F5FF;
+$title-color: #101750;
+
+
+.item {
+  background-color: $main-color;
+  width: 1170px;
+  height: 509px;
+  margin: 126px auto;
+  display: flex;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 25px 10px #F6F4FD;
+  border-radius: 2px;
+}
+
+.item__title {
+  font-size: 36px;
+  line-height: 42px;
+  text-align: center;
+  color: #0D134E;
+  font-weight: 600;
+  margin-top: 74px;
+}
+
+.item__content {
+  display: flex;
+
+}
+
+.item__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 60%;
+
+}
+
+.item__images {
+  flex: 0 1 50%;
+}
+
+.item__image-main {
+  background-image: url('../image/thumbnail.jpg');
+  width: 375px;
+  height: 487px;
+  margin: 20px 30px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.item__image-slider {}
+
+.item__image {}
+
+.item__image {}
+
+
+.item__detail {}
+
+.info__brend {}
+
+.brend__title {}
+
+.brend__name {}
+
+.info__category {}
+
+.category__title {}
+
+.category__name {}
+
+.info__description {}
+
+.description__title {}
+
+.description__text {}
+
+.info__amount {}
+
+.amount__title {}
+
+.amount__name {}
+
+.item__price {}
+
+.item__buttons {}
+
+.button__add {}
+
+.button__buy {}
