@@ -1,0 +1,210 @@
+@import './assets/styles/normalize.css';
+
+
+$main-color:  #F6F5FF;
+$title-color: #101750;
+
+@mixin container {
+  min-width: 100%;
+  display: flex;
+}
+
+.body__container {
+  font-family: 'Josefin Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+}
+
+.main__container {
+  flex: 1 1 auto;
+}
+
+// __________header style
+
+.header__container {
+  @include container;
+  flex-direction: column;
+}
+
+.header__nav-bar {
+  margin-top: 100px;
+  display: flex;
+  padding-left: 20px;
+}
+
+.header__bar {
+  background-color: #6804eb;
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  left: 0px;
+  top: 0px;
+}
+
+.header__contact {
+  color: #F1F1F1;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  letter-spacing: 0em;
+  text-align: left;
+  margin: 10px 30px;
+}
+
+.contact__phone{
+  &::before{
+    content: url('./assets/image/svg/Vector-phone.svg');
+    height: 35px;
+    width: 35px;
+    color: #fff;
+    margin-right: 5px;
+  }
+}
+
+.contact__email{
+  &::before{
+    content: url('./assets/image/svg/Vector-mail.svg ');
+    height: 35px;
+    width: 35px;
+    color: #fff;
+    margin-right: 5px;
+  }
+}
+
+.header__cart-total {
+  color: #F1F1F1;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.header__cart {
+  background-image: url('./assets/image/shopping-cart.png');
+  height: 60px;
+  width: 60px;
+  margin-right: 30px;
+  background-repeat: no-repeat;
+  color: #fff;
+}
+
+.header__name {
+  font-weight: 700;
+  font-size: 2.2rem;
+  color: #fff;
+  color: $title-color;
+}
+
+.header__total-price {
+  display: flex;
+  font-size: 1.5rem;
+  margin: 30px 0;
+}
+
+.total-price__title {
+  font-weight: 600;
+  margin-right: 20px;
+}
+
+.total-price__value {
+  font-weight: 600;
+}
+
+.header__search {
+  margin-left: 30px;
+
+}
+
+.search__input {
+  border: solid 2px #E7E6EF;
+  height: 40px;
+  width: 317px;
+  position: relative;
+}
+
+.search__button {
+  position: absolute;
+  height: 40px;
+  width: 35px;
+  background-color: #FB2E86;
+
+}
+
+// category____
+
+.category {
+  height: 250px;
+  background: $main-color;
+  padding-left: 80px;
+  margin: 30px 0 120px;
+}
+
+.category__title {
+  font-size: 2rem;
+  line-height: 42px;
+  font-weight: 600;
+  padding-top: 60px;
+  color: $title-color;
+}
+
+.item__navbar {
+  margin-top: 10px;
+  display: flex;
+}
+
+.navbar__link  {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.navbar__link-current {
+  color: #FB2E86;
+  font-weight: 600;
+}
+
+.separator {
+  font-weight: 700;
+  margin: 0 15px;
+}
+
+
+
+
+//____ footer style
+
+
+.footer__content {
+  @include container;
+  justify-content: space-between;
+  height: 70px;
+  background-color: #E7E4F8;
+}
+
+.footer__logo {
+  background-image: url('./assets/image/svg/rs_school_js.svg');
+  margin: 10px 30px;
+  width: 120px;
+  background-repeat: no-repeat;
+
+}
+
+.footer__links {
+  margin-right: 30px;
+}
+.footer__link {
+  &:after{
+    content: url('./assets/image/svg/git-logo.svg');
+    height: 45px;
+    width: 45px;
+    display: inline-block;
+    margin-top: 5px;
+  }
+}
+
+.footer__date {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
