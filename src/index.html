@@ -1,12 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="modal">
+      <div class="modal-content">
+        <div class="purchase-cart">
+          <form action="" class="purchase-form">
+
+            <div class="person-details">
+              <div class="person-header">
+                <h4 class="title">Address details</h4>
+              </div>
+              <!-- Person Name -->
+              <div class="person-name">
+                <input type="text" class="name-input form-input" placeholder="Name" />
+              </div>
+              <!-- Person Phone -->
+              <div class="person-phone">
+                <input type="text" class="phone-input form-input" placeholder="Phone number" />
+              </div>
+              <!-- Person Address -->
+              <div class="person-address">
+                <input type="text" class="address-input form-input" placeholder="Delivery address" />
+              </div>
+              <!-- Person Email -->
+              <div class="person-email">
+                <input type="text" class="email-input form-input" placeholder="E-mail" />
+              </div>
+            </div>
+
+            <div class="credit-card">
+              <div class="card-header">
+                <h4 class="title">Credit card detail</h4>
+              </div>
+
+              <div class="card-body">
+                <!-- Card Number -->
+                <div class="card-number__container">
+                  <label for="card-number">
+                    Card number :
+                    <input id="card-number" class="card-number" placeholder="Card Number"/>
+                  </label>
+
+                </div>
+                <input type="text" class="card-number" placeholder="Card Number"/>
+
+                <!-- Date Field -->
+                <div class="date-field">
+                  <div class="month">
+                    <select name="Month">
+                      <option value="january">January</option>
+                      <option value="february">February</option>
+                      <option value="march">March</option>
+                      <option value="april">April</option>
+                      <option value="may">May</option>
+                      <option value="june">June</option>
+                      <option value="july">July</option>
+                      <option value="august">August</option>
+                      <option value="september">September</option>
+                      <option value="october">October</option>
+                      <option value="november">November</option>
+                      <option value="december">December</option>
+                    </select>
+                  </div>
+                  <div class="year">
+                    <select name="Year">
+                      <option value="2016">2016</option>
+                      <option value="2017">2017</option>
+                      <option value="2018">2018</option>
+                      <option value="2019">2019</option>
+                      <option value="2020">2020</option>
+                      <option value="2021">2021</option>
+                      <option value="2022">2022</option>
+                      <option value="2023">2023</option>
+                      <option value="2024">2024</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Card Verification Field -->
+                <div class="card-verification">
+                  <div class="cvv-input">
+                    <input type="text" placeholder="CVV" />
+                  </div>
+                  <div class="cvv-details">
+                    <p>
+                      3 or 4 digits usually found <br />
+                      on the signature strip
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Button -->
+                <button type="submit" class="proceed-btn"><a href="#">Proceed</a></button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
