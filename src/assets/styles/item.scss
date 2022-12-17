@@ -1,0 +1,147 @@
+$main-color: #F6F5FF;
+$text-color: #101750;
+
+@mixin item-photo {
+  width: 200px;
+  height: 170px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-bottom: 10px;
+}
+
+
+.item {
+  background-color: $main-color;
+  width: 1200px;
+  height: 509px;
+  margin: 126px auto;
+  display: flex;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 25px 10px #F6F4FD;
+  border-radius: 2px;
+}
+
+.item__title {
+  font-size: 36px;
+  line-height: 42px;
+  color: #0D134E;
+  font-weight: 600;
+  margin-top: 55px;
+}
+
+.item__content {
+  display: flex;
+
+}
+
+.item__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 60%;
+
+}
+
+.item__images {
+  display: flex;
+  flex: 0 1 60%;
+}
+
+.item__image-main {
+  background-image: url('../image/thumbnail.jpg');
+  width: 320px;
+  margin: 150px 0 20px 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.item__image-slider {
+  width: 240px;
+  margin: 20px 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.item__image1 {
+  @include item-photo();
+  background-image: url('../image/thumbnail1.jpg');
+}
+
+.item__image2 {
+  @include item-photo();
+  background-image: url('../image/thumbnail1.jpg');
+}
+
+.item__image3 {
+  @include item-photo();
+  background-image: url('../image/thumbnail1.jpg');
+}
+
+.item__details {
+  flex: 0 1 44%
+}
+
+.item__detail {
+  line-height: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 30px 0;
+  color: $text-color;
+}
+
+.item__add-to-cart {
+  font-size: 1.5rem;
+  line-height: 29px;
+  text-transform: capitalize;
+  position: relative;
+
+  &::after {
+    content: url('../image/heart.png');
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    top: -5px;
+    margin-left: 15px;
+  }
+}
+
+.item__add-to-cart.add {
+  &::after {
+    content: url('../image/heart-save.png');
+  }
+}
+
+.info__brend {}
+
+.brend__title {}
+
+.brend__name {}
+
+.info__category {}
+
+.category__title {}
+
+.category__name {}
+
+.description__text {
+  font-weight: 500;
+}
+
+.info__amount {}
+
+.amount__title {}
+
+.amount__name {}
+
+.item__price {}
+
+.btn__quick-buy {
+  background-color: #FB2E86;
+  color: #fff;
+  height: 39px;
+  width: 135px;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
