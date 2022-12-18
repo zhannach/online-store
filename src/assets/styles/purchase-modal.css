@@ -1,0 +1,254 @@
+/* Global */
+
+:root {
+  --pink: #f8f8fd;
+  --white: #e7e7e7;
+  --white-gray: #cdcedc;
+  --gray: rgba(242, 242, 242, 0.7);
+  --gray-dark: #5e6977;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --green : #2ECC71;;
+  --green-dark : #27AE60;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--white);
+  font-family: 'Roboto', sans-serif;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* Modal window, purchase cart & form*/
+
+.modal {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: var(--shadow);
+}
+
+.modal-content {
+  margin: 10% auto;
+}
+
+.purchase-cart {
+  display: flex;
+  justify-content: center;
+}
+
+.purchase-form {
+  width: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  border: none;
+}
+
+/* Credit Card, Person  */
+
+.person-details,
+.credit-card {
+  width: 360px;
+  background-color: var(--pink);
+  border-radius: 6px;
+  border: 1px solid var(--white-gray);
+  box-shadow: 1px 2px 3px 0px var(--shadow);
+}
+
+.person-details {
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.credit-card {
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.person-header,
+.card-header {
+  height: 60px;
+  padding: 20px 30px 0;
+}
+
+.person-details,
+.credit-card {
+  padding: 20px 20px;
+}
+
+@media screen and (max-width: 719px) {
+
+  .person-details,
+  .credit-card {
+    border-radius: 6px;
+    border: 1px solid var(--white-gray);
+  }
+
+  .person-details {
+    border-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .credit-card {
+    border-bottom: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+}
+/* Title */
+
+.title {
+  margin: 0;
+  color: var(--gray-dark);
+  font-size: 18px;
+}
+
+/* Common */
+
+.form-input,
+.card-number,
+.cvv-input input,
+.month select,
+.paypal-btn,
+.proceed-btn,
+.year select {
+  height: 42px;
+}
+
+.form-input,
+.card-number,
+.month select,
+.year select {
+  font-size: 16px;
+  font-weight: 100;
+  line-height: 14px;
+}
+
+.form-input,
+.card-number,
+.cvv-details,
+.cvv-input input,
+.month select,
+.year select {
+  color: var(--gray-dark);
+  opacity: 0.7;
+}
+
+/* Card Number */
+
+.form-input {
+  width: 100%;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  border: 2px solid var(--white-gray);
+  border-radius: 6px;
+  outline: none;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.form-input:focus {
+  border: 3px solid var(--green);
+}
+
+.card-number {
+  letter-spacing: 3px;
+  padding-left: 25px;
+}
+
+/* Date Field */
+
+.month select,
+.year select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  width: 145px;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  border: 2px solid var(--white-gray);
+  border-radius: 6px;
+  background: url('./caret.png') no-repeat;
+  background-position: 85% 50%;
+}
+
+.month select {
+  float: left;
+}
+
+.year select {
+  float: right;
+}
+
+/* Card Verification Field */
+
+.card-verification {
+  display       : flex;
+  flex-wrap     : nowrap;
+  gap           : 2rem;
+  margin-bottom : 0.5rem;
+}
+
+.cvv-input input {
+  width         : 100%;
+  float         : left;
+  padding-left  : 20px;
+  border        : 2px solid var(--white-gray);
+  border-radius : 6px;
+  background    : #fff;
+  letter-spacing: 6px;
+  padding-left  : 30px;
+}
+
+/* Buttons Section */
+
+.proceed-btn {
+  cursor: pointer;
+  width: 100%;
+  border-color: transparent;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.proceed-btn {
+  margin-bottom: 10px;
+  background: var(--green);
+}
+
+.proceed-btn:hover {
+  color: var(--white);
+  background: var(--green-dark);
+  outline: none;
+  transition: all 0.3s linear;
+}
+
+.proceed-btn a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.proceed-btn a {
+  color: var(--white)
+}

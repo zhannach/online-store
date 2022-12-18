@@ -1,0 +1,72 @@
+<div class="modal">
+  <div class="modal-content">
+    <div class="purchase-cart">
+      <form class="purchase-form">
+
+        <div class="person-details">
+          <div class="person-header">
+            <h4 class="title">Address details</h4>
+          </div>
+          <!-- Person Name -->
+          <div class="person-name">
+            <input type="text" class="name-input form-input" placeholder="Name" />
+          </div>
+          <!-- Person Phone -->
+          <div class="person-phone">
+            <input type="text" class="phone-input form-input" placeholder="Phone number" />
+          </div>
+          <!-- Person Address -->
+          <div class="person-address">
+            <input type="text" class="address-input form-input" placeholder="Delivery address" />
+          </div>
+          <!-- Person Email -->
+          <div class="person-email">
+            <input type="email" class="email-input form-input" placeholder="E-mail" />
+          </div>
+        </div>
+
+        <div class="credit-card">
+          <div class="card-header">
+            <h4 class="title">Card details</h4>
+          </div>
+
+          <div class="card-body">
+            <!-- Card Number -->
+            <div class="card-number__container">
+              <label for="card-number">
+                Card number :
+              </label>
+              <input type="tel" id="card-number" class="card-number form-input" placeholder="XXXX  XXXX  XXXX  XXXX"
+                pattern="[0-9]*" autocomplete="cc-number" maxlength="12"/>
+            </div>
+
+            <!-- Card Verification Field -->
+            <div class="card-verification">
+
+              <div class="cvv-input">
+                <label for="card-exp">
+                  Exp date :
+                </label>
+                <input type="tel" id="card-exp" type="text" placeholder="MM / YY"
+                  class="form-input" autocapitalize="cc-exp" pattern="[0-9]*" maxlength="4"/>
+              </div>
+
+              <div class="cvv-input">
+                <label for="card-cvv">
+                  CVV :
+                </label>
+                <input type="tel" id="card-cvv" class="form-input" placeholder="XXX"
+                  pattern="[0-9]*" autocomplete="cc-number" maxlength="3"/>
+              </div>
+
+            </div>
+
+            <!-- Button -->
+            <button type="submit" class="proceed-btn"><a href="#">Proceed</a></button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
