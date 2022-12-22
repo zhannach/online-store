@@ -1,26 +1,22 @@
-import cart from '../pages/cart';
-import error404 from '../pages/error404';
-import index from '../pages/index';
-import product from '../pages/product-detail';
-
-type Routes = { [key: string]: string};
+type Routes = { [key: string]: string };
 
 const routes: Routes = {
-  '/': index,
-  '/product-detail': product,
-  '/cart': cart,
-  '/404': error404,
+  '/': '/pages/index.html',
+  '/product-detail': '/pages/product-detail.html',
+  '/404': '/pages/error404.html',
+  '/cart': '/pages/cart.html',
 };
 
 const root = document.getElementById('root') as HTMLDivElement;
 
-function handleLocation() {
+async function handleLocation() {
   const path = window.location.pathname;
   const route = routes[path] || routes['/404'];
-  root.innerHTML = route;
-};
+  const html = await fetch(route).then((data) => data.text());
+  root.innerHTML = html;
+}
 
-function router(event: { preventDefault: () => void; target: { href: string | URL | null | undefined; }; }) {
+function router(event: { preventDefault: () => void; target: { href: string | URL | null | undefined } }) {
   event.preventDefault();
   history.pushState({}, 'newUrl', event.target.href);
   handleLocation();

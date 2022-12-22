@@ -1,2 +1,2 @@
 import './index.css';
-import './components/route'
+import './components/route';

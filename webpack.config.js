@@ -42,6 +42,22 @@ const baseConfig = {
       template: path.resolve(__dirname, './src/index.html'),
       filename: 'index.html',
     }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/pages/cart.html'),
+      filename: './pages/cart.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/pages/error404.html'),
+      filename: './pages/error404.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/pages/product-detail.html'),
+      filename: './pages/product-detail.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/pages/index.html'),
+      filename: './pages/index.html',
+    }),
     new CleanWebpackPlugin(),
   ],
 };
