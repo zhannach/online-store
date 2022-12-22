@@ -11,7 +11,6 @@
     rel="stylesheet">
   <title>Item-description</title>
 </head>
-
 <body class="body__container">
   <header class="header__container">
     <div class="header__bar">
@@ -45,55 +44,19 @@
           </svg>
         </button>
       </div>
+      <nav class="nav-router__links">
+        <ul>
+          <li><a class="nav-link" href="/" onclick="router(event)">Online store home</a></li>
+          <li><a class="nav-link" href="/item" onclick="router(event)">Product Detail</a></li>
+          <li><a class="nav-link" href="/cart" onclick="router(event)">Cart</a></li>
+          <li><a class="nav-link" href="/purchase" onclick="router(event)">Purchase modal</a></li>
+          <li><a class="nav-link" href="/404" onclick="router(event)">404 Error</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
   <main class="main__container">
-    <section class="category">
-      <h2 class="category__title">Product Details</h2>
-      <ul class="item__navbar">
-        <li><a href="#" class="navbar__link">STORE</a></li>
-        <li><span class="separator">.</span></li>
-        <li><a href="#" class="navbar__link">SMARTPHONES</a></li>
-        <li><span class="separator">.</span></li>
-        <li><a href="#" class="navbar__link">APPLE</a></li>
-        <li><span class="separator">.</span></li>
-        <li><a href="#" class="navbar__link-current">IPHONE 9</a></li>
-      </ul>
-    </section>
-    <section class="item">
-      <div class="item__images">
-        <div class="item__image-slider">
-          <div class="item__image1"></div>
-          <div class="item__image2"></div>
-          <div class="item__image3"></div>
-        </div>
-        <div class="item__image-main"></div>
-      </div>
-      <section class="item__details">
-        <h3 class="item__title">iPhone 9</h3>
-        <div class="item__detail">
-          <div class="count__value">€549.00</div>
-        </div>
-        <div class="item__detail">
-          Brand:
-            <span class="brend__name">Apple</span>
-        </div>
-        <div class="item__detail">
-          Category:
-          <span class="category__name">smartphones</span>
-        </div>
-        <div class="item__add-to-cart">Add to cart</div>
-        <div class="item__detail">
-          Description:
-          <span class="description__text">An apple mobile which is nothing like apple</span>
-        </div>
-        <div class="item__detail">
-          Stock:
-          <span class="amount__name">50</span>
-        </div>
-        <button class="btn btn__quick-buy">Buy now</button>
-      </section>
-    </section>
+    <div id="root"></div>
   </main>
   <footer class="footer__content">
     <a href="https://rs.school/js/" class="footer__logo"></a>
@@ -104,5 +67,4 @@
     </div>
   </footer>
 </body>
-
 </html>
