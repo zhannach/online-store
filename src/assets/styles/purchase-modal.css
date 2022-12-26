@@ -9,6 +9,7 @@
   --shadow: rgba(0, 0, 0, 0.1);
   --green : #2ECC71;;
   --green-dark : #27AE60;
+  --red: #FB2E86;
 }
 
 * {
@@ -128,33 +129,38 @@ label {
 
 /* Common */
 
+.person-cvv,
+.person-exp,
+.person-name,
+.person-phone,
+.person-number,
+.person-address,
+.person-email {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .form-input,
-.card-number,
-.cvv-input input,
-.month select,
-.paypal-btn,
-.proceed-btn,
-.year select {
+.proceed-btn{
   height: 42px;
 }
 
-.form-input,
-.card-number,
-.month select,
-.year select {
-  font-size: 16px;
-  font-weight: 100;
+.form-input{
+  font-size: 18px;
+  font-weight: 400;
   line-height: 14px;
 }
 
-.form-input,
-.card-number,
-.cvv-details,
-.cvv-input input,
-.month select,
-.year select {
+.form-input::placeholder{
   color: var(--gray-dark);
   opacity: 0.7;
+}
+
+.error {
+  color: var(--red);
+  align-self: center;
+  margin-bottom: 15px;
+  font-size: 1.25rem;
 }
 
 /* Card Number */
@@ -162,44 +168,43 @@ label {
 .form-input {
   width: 100%;
   margin-bottom: 20px;
-  padding-left: 20px;
   border: 2px solid var(--white-gray);
   border-radius: 6px;
   outline: none;
   transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
+.address-input,
+.email-input,
+.phone-input,
+.name-input {
+  padding-left: 20px;
+}
+
 .form-input:focus {
   border: 3px solid var(--green);
 }
 
-.card-number {
-  letter-spacing: 3px;
+.card-input {
+  letter-spacing: 2px;
   padding-left: 25px;
 }
 
-/* Date Field */
-
-.month select,
-.year select {
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  width: 145px;
-  margin-bottom: 20px;
-  padding-left: 20px;
-  border: 2px solid var(--white-gray);
-  border-radius: 6px;
-  background: url('./caret.png') no-repeat;
-  background-position: 85% 50%;
+.card-ico__container {
+  width: 100%;
+  position: relative;
 }
 
-.month select {
-  float: left;
-}
-
-.year select {
-  float: right;
+.card-icon {
+  position: absolute;
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  right: 5px;
+  bottom: 24px;
+  background-image: url(../image/card.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /* Card Verification Field */
@@ -211,15 +216,20 @@ label {
   margin-bottom : 0.5rem;
 }
 
-.cvv-input input {
+.exp-input,
+.cvv-input {
   width         : 100%;
-  float         : left;
-  padding-left  : 20px;
+  text-align    : center;
+  padding-left  : 0;
   border        : 2px solid var(--white-gray);
   border-radius : 6px;
   background    : #fff;
-  letter-spacing: 6px;
-  padding-left  : 30px;
+  letter-spacing: 4px;
+
+}
+
+.cvv-input::placeholder {
+  text-align:center;
 }
 
 /* Buttons Section */
@@ -238,17 +248,14 @@ label {
 }
 
 .proceed-btn:hover {
-  color: var(--white);
+  color: var(--gray);
   background: var(--green-dark);
   outline: none;
   transition: all 0.3s linear;
 }
 
-.proceed-btn a {
+.proceed-btn {
   text-decoration: none;
   cursor: pointer;
-}
-
-.proceed-btn a {
   color: var(--white)
 }
