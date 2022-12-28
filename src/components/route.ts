@@ -1,3 +1,4 @@
+import { purchaseForm } from '../pages/purchase-modal/purchase';
 type Routes = { [key: string]: string };
 
 const routes: Routes = {
@@ -16,6 +17,7 @@ async function handleLocation() {
   const route = routes[path] || routes['/404'];
   const html = await fetch(route).then((data) => data.text());
   root.innerHTML = html;
+  if (path === '/purchase') purchaseForm();
 }
 
 function router(event: { preventDefault: () => void; target: { href: string | URL | null | undefined } }) {
