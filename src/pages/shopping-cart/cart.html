@@ -17,78 +17,47 @@
           <h3 class="cart-items__title">Total</h3>
         </div>
         <ol class="cart-item__list">
-          <li class="cart-item">
-            <section class="cart-item__details">
-              <div class="cart-item__image">
+        <!-- Cart Item Template -->
+          <template id="cartItemTemp">
+            <li class="cart-item">
+              <section class="cart-item__details">
+                <div class="cart-item__image">
+                </div>
+                <div class="cart-item__description">
+                  <h3 class="cart-item__title"></h3>
+                  <div class="cart-item__detail">
+                    <h3 class="brand__title">
+                      Brand:
+                      <span class="brand__name"></span>
+                    </h3>
+                  </div>
+                  <div class="cart-item__detail">
+                    <h3 class="cart-category__title">Category:</h3>
+                    <span class="cart-category__name"></span>
+                  </div>
+                  <div class="cart-item__detail">
+                    <h3 class="amount__title">
+                      Stock:
+                      <span class="amount__name"></span>
+                    </h3>
+                  </div>
+                </div>
+              </section>
+              <div class="cart-item__price"></div>
+              <div class="cart-item__quantity">
+                <button class="cart-item__btn btn-minus">-</button>
+                <span class="cart-item__amount">1</span>
+                <button class="cart-item__btn btn-plus">+</button>
               </div>
-              <div class="cart-item__description">
-                <h3 class="cart-item__title">iPhone 9</h3>
-                <div class="cart-item__detail">
-                  <h3 class="brend__title">
-                    Brand:
-                    <span class="brend__name">Apple</span>
-                  </h3>
+              <div class="cart-item__total"></div>
+            </li>
+          </template>
 
-                </div>
-                <div class="cart-item__detail">
-                  <h3 class="cart-category__title">Category:</h3>
-                  <span class="cart-category__name">smartphones</span>
-                </div>
-                <div class="cart-item__detail">
-                  <h3 class="amount__title">
-                    Stock:
-                    <span class="amount__name">50</span>
-                  </h3>
-                </div>
-              </div>
-            </section>
-            <div class="cart-item__price">$549</div>
-            <div class="cart-item__quantity">
-              <button class="cart-item__btn btn-minus">-</button>
-              <span class="cart-item__amount">1</span>
-              <button class="cart-item__btn btn-plus">+</button>
-            </div>
-            <div class="cart-item__total">$549</div>
-          </li>
-          <li class="cart-item">
-            <section class="cart-item__details">
-              <div class="cart-item__image">
-              </div>
-              <div class="cart-item__description">
-                <h3 class="cart-item__title">iPhone 9</h3>
-                <div class="cart-item__detail">
-                  <h3 class="brend__title">
-                    Brand:
-                    <span class="brend__name">Apple</span>
-                  </h3>
-
-                </div>
-                <div class="cart-item__detail">
-                  <h3 class="cart-category__title">Category:</h3>
-                  <span class="cart-category__name">smartphones</span>
-                </div>
-                <div class="cart-item__detail">
-                  <h3 class="amount__title">
-                    Stock:
-                    <span class="amount__name">50</span>
-                  </h3>
-                </div>
-              </div>
-            </section>
-            <div class="cart-item__price">$549</div>
-            <div class="cart-item__quantity">
-              <button class="cart-item__btn btn-minus">-</button>
-              <span class="cart-item__amount">1</span>
-              <button class="cart-item__btn btn-plus">+</button>
-            </div>
-            <div class="cart-item__total">$549</div>
-          </li>
         </ol>
         <ul class="cart-item__pagination">
-          <li class="pagination__page"><a class="pagination__link" href="#">Previous</a></li>
-          <li class="pagination__page"><a class="pagination__link" href="#">1</a></li>
-          <li class="pagination__page"><a class="pagination__link" href="#">2</a></li>
-          <li class="pagination__page"><a class="pagination__link" href="#">Next</a></li>
+          <li class="pagination__page"><div class="pagination__link link-prev">Previous</div></li>
+          <li class="pagination__page"><div class="pagination__link link-page">1</div></li>
+          <li class="pagination__page"><div class="pagination__link link-next">Next</div></li>
         </ul>
       </section>
       <aside class="cart-total">
@@ -96,19 +65,18 @@
         <div class="cart-total__price">
           <div class="price__subtotals">
             Subtotals:
-            <span class="subtotals__value">$549</span>
+            <span class="subtotals__value"></span>
           </div>
           <div class="price__totals">
             Totals:
-            <span class="totals__value">$1098</span>
+            <span class="totals__value"></span>
           </div>
-          <input type="search" placeholder="Enter promo code" class="price__promo"></input>
+          <input type="text" placeholder="Enter promo code" class="price__promo"></input>
           <div class="cart-total__promo">
-            <span class="promo__title">Promo-code:</span>
-            <div class="promo__codes"></div>
+            <span class="promo__title">Promo for test:</span>
+            <span class="promo__codes">RSS, EPM</span>
           </div>
           <button class="btn btn__quick-buy">Buy now</button>
         </div>
-
       </aside>
     </section>

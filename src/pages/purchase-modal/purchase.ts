@@ -2,18 +2,7 @@ import cardVisa from '../../assets/image/card-visa.svg';
 import card from '../../assets/image/card.svg';
 import cardMaster from '../../assets/image/card-mastercard.svg';
 import cardAmex from '../../assets/image/card-american-express.svg';
-
-type Flags = {
-  [key: string]: () => boolean;
-};
-
-type Inputs = {
-  [key: string]: HTMLInputElement;
-};
-
-type Cards = {
-  [key: string]: string;
-};
+import { Flags, Cards, Inputs } from '../../components/types';
 
 export const purchaseForm = () => {
   const creditCards: Cards = {

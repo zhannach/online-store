@@ -1,4 +1,6 @@
 import { purchaseForm } from '../pages/purchase-modal/purchase';
+import App from './app/app';
+
 type Routes = { [key: string]: string };
 
 const routes: Routes = {
@@ -11,6 +13,7 @@ const routes: Routes = {
 
 //const root = document.getElementById<HTMLDivElement>('#main__container');
 const root = document.getElementById('root') as HTMLDivElement;
+const app = new App();
 
 async function handleLocation() {
   const path = window.location.pathname;
@@ -18,6 +21,7 @@ async function handleLocation() {
   const html = await fetch(route).then((data) => data.text());
   root.innerHTML = html;
   if (path === '/purchase') purchaseForm();
+  if (path === '/cart') app.start();
 }
 
 function router(event: { preventDefault: () => void; target: { href: string | URL | null | undefined } }) {
