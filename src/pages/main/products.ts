@@ -42,15 +42,19 @@ enum FilterType {
 
 
 export default class ProductsPage {
-  products: Product[]
+  allProducts: Product[]
+  filteredProducts: Product[]
   total: number = 1
   filters: Filter[]
-  productsContainer: HTMLElement;
+  allProductsContainer: HTMLElement;
+  searchInputEl: HTMLInputElement
 
   constructor() {
-    this.products = []
+    this.allProducts = []
+    this.filteredProducts = []
     this.filters = []
-    this.productsContainer = document.querySelector('.home-products__items') as HTMLElement
+    this.allProductsContainer = document.querySelector('.home-products__items') as HTMLElement
+    this.searchInputEl = document.querySelector('.sort-products__search-input') as HTMLInputElement
   }
 
   fetchProducts = async function (page: number = 1, limit: number = 100): Promise<ApiProductsResponse> {
@@ -64,16 +68,19 @@ export default class ProductsPage {
   }
 
   async run() {
-    // /products/19
-    // /\/products\/([0-9]+)/i
+    // /allProducts/19
+    // /\/allProducts\/([0-9]+)/i
     const data: ApiProductsResponse = await this.fetchProducts()
-    this.products = data.products
+    this.filteredProducts = data.products
+    this.allProducts = data.products
     this.total = data.total
     this.render()
     this.initFilters()
     this.renderFilterSidebar()
     this.attachEvents()
     this.changeView()
+    this.sortProducts()
+    this.searchProducts()
   }
 
   initFilters() {
@@ -117,9 +124,9 @@ export default class ProductsPage {
         type: FilterType.Range,
         childSelector: '.filter-stock__input',
         element: document.querySelector('.filter-stock') as HTMLElement,
-        // only filtered products
+        // only filtered allProducts
         values: [],
-        // all products
+        // all allProducts
         options: new Set(),
         match: (product: Product, values: Array<string | number>) => {
           if (values[0] === 0 || values[1] === 0) return true
@@ -127,7 +134,7 @@ export default class ProductsPage {
         }
       },
     ]
-    this.products.forEach((product) => {
+    this.allProducts.forEach((product) => {
       this.filters.forEach((filter) => {
         const filterValue = product[filter.name as keyof Product] ?? null
         if (typeof filterValue === 'number' || typeof filterValue === 'string') {
@@ -146,26 +153,20 @@ export default class ProductsPage {
         this.filter()
       })
     })
+    const searchBtnEl = document.querySelector('.sort-products__search-btn') as HTMLButtonElement
+    searchBtnEl.addEventListener('click', () => this.filter())
   }
 
-  // render data products on the page
+  // render data allProducts on the page
   render() {
     const template = document.querySelector('#item-template') as HTMLTemplateElement;
-    const productCarts: string[] = this.products.map((item) => {
-      return interpolate(template.innerHTML, { item })
-    })
-    this.productsContainer.innerHTML = productCarts.join('');
-  }
-
-  renderFilterProducts(filteredProducts: Product[]) {
-    const template = document.querySelector('#item-template') as HTMLTemplateElement;
-    const productCarts: string[] = filteredProducts.map((item) => {
+    const productCarts: string[] = this.filteredProducts.map((item) => {
       return interpolate(template.innerHTML, { item })
     })
     if (productCarts.length > 0) {
-      this.productsContainer.innerHTML = productCarts.join('');
+      this.allProductsContainer.innerHTML = productCarts.join('');
     } else {
-      this.productsContainer.innerHTML = `<h2 class="home-products__not-found">No products found</h2>`
+      this.allProductsContainer.innerHTML = `<h2 class="home-products__not-found">No products found</h2>`
     }
   }
 
@@ -207,16 +208,18 @@ export default class ProductsPage {
       return filter
     })
 
-    let filteredProducts: Product[] = this.products.filter((product: Product) => {
+    this.filteredProducts = this.allProducts.filter((product: Product) => {
       for (const filter of this.filters) {
-        if (!filter.match(product, filter.values)) {
+        if (filter.values.length !== 0 && !filter.match(product, filter.values)) {
           return false
         }
       }
+      if (this.searchInputEl.value.trim() !== '' && !this.inSearch(product)) {
+        return false
+      }
       return true
     })
-    console.log(this.filters)
-    this.renderFilterProducts(filteredProducts)
+    this.render()
   }
 
 
@@ -239,14 +242,49 @@ export default class ProductsPage {
     const viewPairBtn = document.querySelector('.products-view__pair') as HTMLButtonElement
     viewPairBtn.addEventListener('click', () => {
       console.log('click')
-      this.productsContainer.classList.add('double-view')
+      this.allProductsContainer.classList.add('double-view')
     })
     viewListBtn.addEventListener('click', () => {
       console.log('click')
-      this.productsContainer.classList.remove('double-view')
+      this.allProductsContainer.classList.remove('double-view')
     })
   }
 
+  sortProducts() {
+    const sortSelectEl = document.querySelector('.home__sort-bar') as HTMLSelectElement;
+    console.log(sortSelectEl.value)
+    sortSelectEl.addEventListener('change', () => {
+      if (sortSelectEl.value === 'price-asc') {
+        this.filteredProducts.sort((a: Product, b: Product) => a.price - b.price)
+      } else if (sortSelectEl.value === 'price-desc') {
+        this.filteredProducts.sort((a: Product, b: Product) => b.price - a.price)
+      } else if (sortSelectEl.value === 'popularity-asc') {
+        this.filteredProducts.sort((a: Product, b: Product) => a.rating - b.rating)
+      } else if (sortSelectEl.value === 'popularity-desc') {
+        this.filteredProducts.sort((a: Product, b: Product) => b.rating - a.rating)
+      }
+      this.render()
+    })
+  }
 
+  searchProducts() {
+    const searchBtnEl = document.querySelector('.sort-products__search-btn') as HTMLButtonElement
+    searchBtnEl.addEventListener('click', () => {
+      this.filteredProducts.filter((product) => {
+        if (product.category.includes(this.searchInputEl.value) || product.title.includes(this.searchInputEl.value) ||
+          product.brand.includes(this.searchInputEl.value) || product.description.includes(this.searchInputEl.value)) {
+
+        }
+      })
+    })
+
+  }
+
+  inSearch(product: Product) {
+    const value = this.searchInputEl.value.toLowerCase()
+    return product.category.toLowerCase().includes(value) || product.title.toLowerCase().includes(value) ||
+      product.brand.toLowerCase().includes(value) || product.description.toLowerCase().includes(value) ||
+      product.price.toString() === value || product.stock.toString() === value
+  }
 }
 
