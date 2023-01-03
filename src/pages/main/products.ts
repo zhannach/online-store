@@ -2,7 +2,7 @@ import interpolate from "../../helpers/interpolate";
 import rangeSliderInit from '../../helpers/multiple-slider'
 import 'nouislider/dist/nouislider.css';
 import '../../assets/styles/multiple-slider.scss'
-
+import { target } from 'nouislider';
 
 interface Product {
   id: number;
@@ -42,19 +42,32 @@ enum FilterType {
 
 
 export default class ProductsPage {
+  sortFuncs: Map<string, (a: Product, b: Product) => number>
   allProducts: Product[]
   filteredProducts: Product[]
   total: number = 1
   filters: Filter[]
-  allProductsContainer: HTMLElement;
+  allProductsContainer: HTMLElement
   searchInputEl: HTMLInputElement
+  sortSelectEl: HTMLSelectElement
+  viewModeEls: NodeListOf<HTMLButtonElement>
+  foundAmount: HTMLElement
 
   constructor() {
     this.allProducts = []
     this.filteredProducts = []
     this.filters = []
-    this.allProductsContainer = document.querySelector('.home-products__items') as HTMLElement
+    this.sortFuncs = new Map([
+      ["price-asc", (a: Product, b: Product) => a.price - b.price],
+      ["price-desc", (a: Product, b: Product) => b.price - a.price],
+      ["popularity-asc", (a: Product, b: Product) => a.rating - b.rating],
+      ["popularity-desc", (a: Product, b: Product) => b.rating - a.rating],
+    ]),
+      this.allProductsContainer = document.querySelector('.home-products__items') as HTMLElement
     this.searchInputEl = document.querySelector('.sort-products__search-input') as HTMLInputElement
+    this.sortSelectEl = document.querySelector('.home__sort-bar') as HTMLSelectElement
+    this.viewModeEls = document.querySelectorAll('.products-view__btn') as NodeListOf<HTMLButtonElement>
+    this.foundAmount = document.querySelector('.home__found-amount') as HTMLElement
   }
 
   fetchProducts = async function (page: number = 1, limit: number = 100): Promise<ApiProductsResponse> {
@@ -68,19 +81,17 @@ export default class ProductsPage {
   }
 
   async run() {
-    // /allProducts/19
-    // /\/allProducts\/([0-9]+)/i
+    // /products/19
+    // /\/products\/([0-9]+)/i
     const data: ApiProductsResponse = await this.fetchProducts()
-    this.filteredProducts = data.products
     this.allProducts = data.products
     this.total = data.total
-    this.render()
     this.initFilters()
+    this.parseUrl('?category=smartphones/laptops/home-decoration&brand=Apple/Samsung/OPPO&price=234/1421&stock=17/130&view=grid&sort=price-desc')
+    this.filterProducts()
+    this.render()
     this.renderFilterSidebar()
     this.attachEvents()
-    this.changeView()
-    this.sortProducts()
-    this.searchProducts()
   }
 
   initFilters() {
@@ -134,6 +145,7 @@ export default class ProductsPage {
         }
       },
     ]
+    // init all unique options that exist in products
     this.allProducts.forEach((product) => {
       this.filters.forEach((filter) => {
         const filterValue = product[filter.name as keyof Product] ?? null
@@ -155,6 +167,46 @@ export default class ProductsPage {
     })
     const searchBtnEl = document.querySelector('.sort-products__search-btn') as HTMLButtonElement
     searchBtnEl.addEventListener('click', () => this.filter())
+
+    this.sortSelectEl.addEventListener('change', () => {
+      if (this.sortFuncs.has(this.sortSelectEl.value)) {
+        this.filteredProducts.sort(this.sortFuncs.get(this.sortSelectEl.value))
+      }
+      this.render()
+      this.updateURL()
+    })
+
+    this.viewModeEls.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('selected')) return
+        this.allProductsContainer.classList.toggle('double-view')
+        this.viewModeEls.forEach((el) => el.classList.toggle('selected'))
+        this.updateURL()
+      })
+    })
+
+    const reserBtn = filterSection.querySelector('.filter__btn-reset') as HTMLButtonElement
+    reserBtn.addEventListener('click', () => this.resetFilters())
+
+    const copyBtn = filterSection.querySelector('.filter__btn-copy') as HTMLButtonElement
+    copyBtn.addEventListener('click', () => {
+      const linkValue = window.location.href;
+      if (linkValue) {
+        navigator.clipboard.writeText(linkValue)
+          .then(() => {
+            if (copyBtn.innerText !== 'Copied!') {
+              const originalText = copyBtn.innerText;
+              copyBtn.innerText = 'Copied!';
+              setTimeout(() => {
+                copyBtn.innerText = originalText;
+              }, 1000);
+            }
+          })
+          .catch(err => {
+            console.log('Something went wrong', err);
+          })
+      }
+    })
   }
 
   // render data allProducts on the page
@@ -164,9 +216,12 @@ export default class ProductsPage {
       return interpolate(template.innerHTML, { item })
     })
     if (productCarts.length > 0) {
+      this.foundAmount.innerText = `${productCarts.length}`
       this.allProductsContainer.innerHTML = productCarts.join('');
     } else {
       this.allProductsContainer.innerHTML = `<h2 class="home-products__not-found">No products found</h2>`
+      this.foundAmount.innerText = '0'
+
     }
   }
 
@@ -176,8 +231,9 @@ export default class ProductsPage {
         const listEl = filter.element.querySelector('.filter-list') as HTMLDivElement
         filter.options.forEach(option => {
           const element = document.createElement('div')
+          const checked = filter.values.includes(option) ? 'checked' : ''
           element.classList.add('checkbox-line', 'item-active')
-          element.innerHTML = ` <input type="checkbox" class="checkbox-input" id="${option}" value="${option}">
+          element.innerHTML = ` <input type="checkbox" class="checkbox-input" id="${option}" value="${option}" ${checked}>
           <label for="${option}">${option}</label>
           <span class="checkbox-amount">5/5</span>`
           listEl.appendChild(element)
@@ -187,15 +243,16 @@ export default class ProductsPage {
         const maxValue = Math.max(...filter.options as Set<number>)
         const minInput = filter.element.querySelector('.input__min') as HTMLInputElement
         const maxInput = filter.element.querySelector('.input__max') as HTMLInputElement
-        minInput.value = minValue.toString()
-        maxInput.value = maxValue.toString()
-        console.log(maxValue.toString())
+        minInput.value = filter.values[0] ? filter.values[0].toString() : minValue.toString()
+        maxInput.value = filter.values[1] ? filter.values[1].toString() : maxValue.toString()
         rangeSliderInit({
           parentEl: filter.element,
           sliderSelector: '.filter-multi-input',
           textPrefix: filter.name === 'price' ? '$' : '',
           minValue,
           maxValue,
+          startValue: Number(minInput.value),
+          endValue: Number(maxInput.value),
           callback: () => this.filter()
         })
       }
@@ -207,7 +264,27 @@ export default class ProductsPage {
       filter.values = this.getFilteredValues(filter.element, filter.childSelector, filter.type)
       return filter
     })
+    this.filterProducts()
+    this.render()
+    this.updateURL()
+  }
 
+  resetFilters() {
+    this.filters.forEach((filter) => {
+      if (filter.type === FilterType.Checkbox) {
+        const inputs = filter.element.querySelectorAll(`input`)
+        inputs.forEach((input) => input.checked = false)
+      } else if (filter.type === FilterType.Range) {
+        const input = filter.element.querySelector('.filter-multi-input') as target;
+        const minValue = Math.min(...filter.options as Set<number>)
+        const maxValue = Math.max(...filter.options as Set<number>)
+        input.noUiSlider?.set([minValue, maxValue])
+      }
+    })
+    this.filter()
+  }
+
+  filterProducts() {
     this.filteredProducts = this.allProducts.filter((product: Product) => {
       for (const filter of this.filters) {
         if (filter.values.length !== 0 && !filter.match(product, filter.values)) {
@@ -219,10 +296,8 @@ export default class ProductsPage {
       }
       return true
     })
-    this.render()
+      .sort(this.sortFuncs.get(this.sortSelectEl.value || 'price-asc'))
   }
-
-
   // selecte checked values to one array
 
   getFilteredValues(parentElement: HTMLElement, selector: string, filterType: FilterType): Array<string | number> {
@@ -237,54 +312,76 @@ export default class ProductsPage {
     return returnValues;
   }
 
-  changeView() {
-    const viewListBtn = document.querySelector('.products-view__list') as HTMLButtonElement
-    const viewPairBtn = document.querySelector('.products-view__pair') as HTMLButtonElement
-    viewPairBtn.addEventListener('click', () => {
-      console.log('click')
-      this.allProductsContainer.classList.add('double-view')
-    })
-    viewListBtn.addEventListener('click', () => {
-      console.log('click')
-      this.allProductsContainer.classList.remove('double-view')
-    })
-  }
-
-  sortProducts() {
-    const sortSelectEl = document.querySelector('.home__sort-bar') as HTMLSelectElement;
-    console.log(sortSelectEl.value)
-    sortSelectEl.addEventListener('change', () => {
-      if (sortSelectEl.value === 'price-asc') {
-        this.filteredProducts.sort((a: Product, b: Product) => a.price - b.price)
-      } else if (sortSelectEl.value === 'price-desc') {
-        this.filteredProducts.sort((a: Product, b: Product) => b.price - a.price)
-      } else if (sortSelectEl.value === 'popularity-asc') {
-        this.filteredProducts.sort((a: Product, b: Product) => a.rating - b.rating)
-      } else if (sortSelectEl.value === 'popularity-desc') {
-        this.filteredProducts.sort((a: Product, b: Product) => b.rating - a.rating)
-      }
-      this.render()
-    })
-  }
-
-  searchProducts() {
-    const searchBtnEl = document.querySelector('.sort-products__search-btn') as HTMLButtonElement
-    searchBtnEl.addEventListener('click', () => {
-      this.filteredProducts.filter((product) => {
-        if (product.category.includes(this.searchInputEl.value) || product.title.includes(this.searchInputEl.value) ||
-          product.brand.includes(this.searchInputEl.value) || product.description.includes(this.searchInputEl.value)) {
-
-        }
-      })
-    })
-
-  }
-
   inSearch(product: Product) {
     const value = this.searchInputEl.value.toLowerCase()
     return product.category.toLowerCase().includes(value) || product.title.toLowerCase().includes(value) ||
       product.brand.toLowerCase().includes(value) || product.description.toLowerCase().includes(value) ||
       product.price.toString() === value || product.stock.toString() === value
+  }
+
+  updateURL() {
+    const search: string[] = []
+    // loop filters => add search elems: caterory=smartphones/laptops
+    this.filters.forEach((filter) => {
+      if (filter.values.length === 0) return
+      if (filter.type === FilterType.Range) {
+        const minValue = Math.min(...filter.options as Set<number>)
+        const maxValue = Math.max(...filter.options as Set<number>)
+        if (minValue === filter.values[0] && maxValue === filter.values[1]) return
+      }
+      search.push(`${filter.name}=${filter.values.join('/')}`)
+    })
+    // view = add view by class
+    if (this.allProductsContainer.className.includes('double-view')) {
+      search.push(`view=grid`)
+    }
+
+    // search = add search input value
+    if (this.searchInputEl.value !== '') {
+      search.push(`search=${encodeURIComponent(this.searchInputEl.value)}`)
+    }
+    // sort = ??
+    if (this.sortSelectEl.value !== 'price-asc') {
+      search.push(`sort=${this.sortSelectEl.value}`)
+    }
+
+    let url = window.location.pathname;
+    if (search.length) {
+      url += `?${search.join('&')}`
+    }
+    history.pushState({}, '', url)
+
+  }
+
+  parseUrl(queryString: string) {
+    const query: Map<string, string> = new Map
+    //const queryString = window.location.search
+    const pairs = (queryString[0] === '?' ? queryString.slice(1) : queryString).split('&');
+    for (let i = 0; i < pairs.length; i++) {
+      const pair = pairs[i].split('=');
+      query.set(decodeURIComponent(pair[0]), decodeURIComponent(pair[1] || ''));
+    }
+    // loop filters => add search elems: caterory=smartphones/laptops
+    this.filters.forEach((filter) => {
+      if (!query.get(filter.name)) return
+      filter.values = query.get(filter.name)?.split('/') as string[]
+      if (filter.type === FilterType.Range) {
+        filter.values = filter.values.map((v) => Number(v)) as number[]
+      }
+    })
+    // view = add view by class
+    if (query.get('view') === 'grid') {
+      this.allProductsContainer.classList.add('double-view')
+      this.viewModeEls.forEach((el) => el.classList.toggle('selected'))
+    }
+    // search = add search input value
+    if (query.get('search')) {
+      this.searchInputEl.value = query.get('search') as string
+    }
+    // sort = ??
+    if (query.get('sort')) {
+      this.sortSelectEl.value = query.get('sort') as string
+    }
   }
 }
 
