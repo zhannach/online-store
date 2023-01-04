@@ -20,7 +20,9 @@
         <!-- Cart Item Template -->
           <template id="cartItemTemp">
             <li class="cart-item">
+
               <section class="cart-item__details">
+                <div class="cart-item__id"></div>
                 <div class="cart-item__image">
                 </div>
                 <div class="cart-item__description">
@@ -52,12 +54,17 @@
               <div class="cart-item__total"></div>
             </li>
           </template>
-
         </ol>
         <ul class="cart-item__pagination">
           <li class="pagination__page"><div class="pagination__link link-prev">Previous</div></li>
           <li class="pagination__page"><div class="pagination__link link-page">1</div></li>
           <li class="pagination__page"><div class="pagination__link link-next">Next</div></li>
+          <li class="pagination__page">
+            <div class="pagination__limit">
+              <label class="pagination__limit-title">Page limit</label>
+              <input type="number" class="pagination__limit-index" min="1" max="10" value="3">
+            </div>
+          </li>
         </ul>
       </section>
       <aside class="cart-total">

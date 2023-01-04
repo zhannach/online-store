@@ -1,20 +1,35 @@
 import { Products } from '../../components/types';
 import { randomInt, arrayRemove } from '../../components/utils/utils';
 import { PromoNodes, PromoCodes } from '../../components/types';
+import cartTemplate from './template';
 
 class Cart {
   private _data: Products[] = [];
   private _subtotal!: HTMLDivElement;
   private _total!: HTMLDivElement;
   private _discount = 0;
+  private _quantityCart = 0;
+  private _cartItems: HTMLElement[] = [];
+  private _queryFlag = true;
+  private _container!: HTMLOListElement;
+  private _headerTotal!: HTMLSpanElement;
+  private _headerCart!: HTMLSpanElement;
+
+  query(): boolean {
+    this._total = document.querySelector('.totals__value') as HTMLDivElement;
+    this._subtotal = document.querySelector('.subtotals__value') as HTMLDivElement;
+    this._container = document.querySelector('.cart-item__list') as HTMLOListElement;
+    this._headerTotal = document.querySelector('.cart__sum') as HTMLSpanElement;
+    this._headerCart = document.querySelector('.cart__num') as HTMLSpanElement;
+    return false;
+  }
 
   draw(products: Products[]) {
     this._data = products;
-    this._total = document.querySelector('.totals__value') as HTMLDivElement;
-    this._subtotal = document.querySelector('.subtotals__value') as HTMLDivElement;
-    const container = document.querySelector<HTMLOListElement>('.cart-item__list');
+    if (this._queryFlag) this._queryFlag = this.query();
     const fragment = document.createDocumentFragment();
-    const cartItemTemp = document.querySelector('#cartItemTemp') as HTMLTemplateElement;
+    const cartItemTemp = document.createElement('template');
+    cartItemTemp.innerHTML = cartTemplate;
 
     this._data.forEach((item, idx) => {
       item.quantity = 1 * randomInt(1, 5);
@@ -26,6 +41,7 @@ class Cart {
       const total = cartClone.querySelector('.cart-item__total') as HTMLDivElement;
 
       (cartClone.querySelector('.cart-item__image') as HTMLDivElement).style.backgroundImage = `url(${item.thumbnail})`;
+      (cartClone.querySelector('.cart-item__id') as HTMLTitleElement).textContent = `${idx + 1}`;
       (cartClone.querySelector('.cart-item__title') as HTMLTitleElement).textContent = item.title;
       (cartClone.querySelector('.brand__name') as HTMLTitleElement).textContent = item.brand;
       (cartClone.querySelector('.cart-category__name') as HTMLSpanElement).textContent = item.category;
@@ -40,13 +56,14 @@ class Cart {
       fragment.append(cartClone);
     });
 
-    if (container) {
-      container.innerHTML = '';
-      container.appendChild(fragment);
-    }
+    this._container.innerHTML = '';
+    this._container.appendChild(fragment);
+    this._quantityCart = this._data.reduce((accum, curr) => accum + curr.quantity, 0);
+    this._headerCart.textContent = `${this._quantityCart}`;
 
     this.drawTotals();
     this.applyPromo();
+    this.pagination();
   }
 
   drawTotals() {
@@ -54,16 +71,29 @@ class Cart {
       let sum = this._data.reduce((accum, cur) => cur.price * cur.quantity + accum, 0);
       this._subtotal.textContent = `$${sum}`;
       if (this._discount) sum *= (100 - this._discount) / 100;
-      this._total.textContent = `$${sum.toFixed(0)}`;
+      const totalSum = `$${sum.toFixed(0)}`;
+      this._total.textContent = totalSum;
+      this._headerTotal.textContent = totalSum;
     }
   }
 
   updateItem(amount: HTMLSpanElement, stock: HTMLSpanElement, btn: HTMLDivElement, total: HTMLDivElement, idx: number) {
+    const removeItem = (index: number): void => {
+      const cartItem = this._data[index];
+      const cartNode = this._cartItems[index];
+      cartNode.remove();
+      this._cartItems = arrayRemove(this._cartItems, cartNode);
+      this._data = arrayRemove(this._data, cartItem);
+      this.draw(this._data);
+    };
+
     const updateData = () => {
       if (!btn && !amount && !this._data[idx].quantity) return;
       const item = this._data[idx];
       if (item.stock && btn.classList.contains('btn-plus')) {
         item.quantity += 1;
+        this._quantityCart += 1;
+        this._headerCart.textContent = `${this._quantityCart}`;
         item.stock -= 1;
         amount.textContent = `${item.quantity}`;
         stock.textContent = `${item.stock}`;
@@ -71,7 +101,10 @@ class Cart {
       }
       if (item.quantity && btn.classList.contains('btn-minus')) {
         item.quantity -= 1;
+        this._quantityCart -= 1;
+        this._headerCart.textContent = `${this._quantityCart}`;
         item.stock += 1;
+        if (item.quantity === 0) removeItem(idx);
         amount.textContent = `${item.quantity}`;
         stock.textContent = `${item.stock}`;
         total.textContent = `${item.price * item.quantity}`;
@@ -98,7 +131,7 @@ class Cart {
     const totalPromo = document.querySelector('.cart-total__promo') as HTMLDivElement;
     const priceSubTotals = document.querySelector('.price__subtotals') as HTMLDivElement;
 
-    const showPromo = (value: string, type: string): HTMLElement => {
+    const showPromo = (value: keyof PromoNodes, type: string): HTMLElement => {
       const node = document.createElement('div');
       const button = document.createElement('span');
 
@@ -118,7 +151,7 @@ class Cart {
       return node;
     };
 
-    const applyPromo = (value: string, type: string) => {
+    const applyPromo = (value: keyof PromoNodes, type: string) => {
       if (type === 'Add') {
         const nodeAdd = promoAddList.pop();
         if (nodeAdd) nodeAdd[value].remove();
@@ -157,6 +190,48 @@ class Cart {
       }
     }
     inputPromo.addEventListener('input', handlePromo);
+  }
+
+  pagination() {
+    this._cartItems = [...document.querySelectorAll<HTMLElement>('.cart-item')];
+    const paginationNumbers = document.querySelector('.pagination__limit-index') as HTMLInputElement;
+    const pageNumber = document.querySelector('.link-page') as HTMLDivElement;
+    const prevBtn = document.querySelector('.link-prev') as HTMLDivElement;
+    const nextBtn = document.querySelector('.link-next') as HTMLDivElement;
+
+    let paginationLimit = 0;
+    let currentPage = 1;
+    let pageCount = 0;
+
+    const setCurrentPage = (pageNum: number): void => {
+      if (pageNum <= 0) return;
+      if (pageNum > pageCount) return;
+      console.log(pageCount, pageNum);
+      currentPage = pageNum;
+      pageNumber.textContent = `${currentPage}`;
+      const prevRange = (pageNum - 1) * paginationLimit;
+      const currRange = pageNum * paginationLimit;
+      this._cartItems.forEach((item, index) => {
+        item.classList.add('hidden');
+        if (index >= prevRange && index < currRange) {
+          item.classList.remove('hidden');
+        }
+      });
+    };
+    const handleItemsLimit = () => {
+      if (paginationNumbers && Number(paginationNumbers.value.trim()) > 0) {
+        paginationLimit = Number(paginationNumbers.value.trim());
+      } else {
+        paginationLimit = 3;
+        paginationNumbers.value = `${paginationLimit}`;
+      }
+      pageCount = Math.ceil(this._cartItems.length / paginationLimit);
+      setCurrentPage(1);
+    };
+    prevBtn.addEventListener('click', () => setCurrentPage(currentPage - 1));
+    nextBtn.addEventListener('click', () => setCurrentPage(currentPage + 1));
+    paginationNumbers.addEventListener('change', handleItemsLimit);
+    handleItemsLimit();
   }
 }
 
