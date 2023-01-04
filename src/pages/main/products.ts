@@ -87,8 +87,8 @@ export default class ProductsPage {
     this.allProducts = data.products
     this.total = data.total
     this.initFilters()
-    this.parseUrl('?category=smartphones/laptops/home-decoration&brand=Apple/Samsung/OPPO&price=234/1421&stock=17/130&view=grid&sort=price-desc')
-    this.filterProducts()
+    this.parseUrl('?category=smartphones/laptops/home-decoration')
+    this.filteredProducts = this.filterProducts()
     this.render()
     this.renderFilterSidebar()
     this.attachEvents()
@@ -228,14 +228,17 @@ export default class ProductsPage {
   renderFilterSidebar() {
     this.filters.forEach(filter => {
       if (filter.type === FilterType.Checkbox) {
+        const filteredProducts = this.filterProducts(filter.name)
         const listEl = filter.element.querySelector('.filter-list') as HTMLDivElement
         filter.options.forEach(option => {
           const element = document.createElement('div')
           const checked = filter.values.includes(option) ? 'checked' : ''
+          const countAll = this.getFilterOptionMatchCount(option, filter, this.allProducts)
+          const countFiltered = this.getFilterOptionMatchCount(option, filter, filteredProducts)
           element.classList.add('checkbox-line', 'item-active')
           element.innerHTML = ` <input type="checkbox" class="checkbox-input" id="${option}" value="${option}" ${checked}>
           <label for="${option}">${option}</label>
-          <span class="checkbox-amount">5/5</span>`
+          <span class="checkbox-amount">${countFiltered}/${countAll}</span>`
           listEl.appendChild(element)
         })
       } else if (filter.type === FilterType.Range) {
@@ -259,12 +262,32 @@ export default class ProductsPage {
     })
   }
 
+  getFilterOptionMatchCount(value: string | number, filter: Filter, products: Product[]): number {
+    return products.reduce((acc: number, product) => {
+      return filter.match(product, [value]) ? acc + 1 : acc
+    }, 0)
+  }
+
   filter() {
     this.filters = this.filters.map((filter) => {
       filter.values = this.getFilteredValues(filter.element, filter.childSelector, filter.type)
       return filter
     })
-    this.filterProducts()
+    this.filters.forEach((filter) => {
+      if (filter.type === FilterType.Checkbox) {
+        const filteredProducts = this.filterProducts(filter.name)
+        const listEl = filter.element.querySelector('.filter-list') as HTMLDivElement
+        let index = 0
+        filter.options.forEach((option) => {
+          const countAll = this.getFilterOptionMatchCount(option, filter, this.allProducts)
+          const countFiltered = this.getFilterOptionMatchCount(option, filter, filteredProducts)
+          const counter = listEl.children[index]?.querySelector('.checkbox-amount')
+          if (counter) counter.innerHTML = `${countFiltered}/${countAll}`
+          index++
+        })
+      }
+    })
+    this.filteredProducts = this.filterProducts()
     this.render()
     this.updateURL()
   }
@@ -284,10 +307,14 @@ export default class ProductsPage {
     this.filter()
   }
 
-  filterProducts() {
-    this.filteredProducts = this.allProducts.filter((product: Product) => {
+  filterProducts(excludeFilter: string = ''): Product[] {
+    return this.allProducts.filter((product: Product) => {
       for (const filter of this.filters) {
-        if (filter.values.length !== 0 && !filter.match(product, filter.values)) {
+        if (
+          filter.name !== excludeFilter
+          && filter.values.length !== 0
+          && !filter.match(product, filter.values)
+        ) {
           return false
         }
       }
