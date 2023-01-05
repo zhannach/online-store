@@ -8,7 +8,6 @@ const routes: Routes = {
   '/item': '/pages/item.html',
   '/404': '/pages/error404.html',
   '/cart': '/pages/cart.html',
-  '/purchase': '/pages/purchase.html',
 };
 
 //const root = document.getElementById<HTMLDivElement>('#main__container');
@@ -20,7 +19,6 @@ async function handleLocation() {
   const route = routes[path] || routes['/404'];
   const html = await fetch(route).then((data) => data.text());
   root.innerHTML = html;
-  if (path === '/purchase') purchaseForm();
   if (path === '/cart') app.start();
 }
 

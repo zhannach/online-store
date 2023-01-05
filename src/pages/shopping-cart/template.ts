@@ -31,5 +31,4 @@ const cartTemplate = `
     </div>
     <div class="cart-item__total"></div>
   </li>`;
-
 export default cartTemplate;

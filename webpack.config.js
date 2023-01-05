@@ -58,10 +58,6 @@ const baseConfig = {
       template: path.resolve(__dirname, './src/pages/main/main-page.html'),
       filename: './pages/main-page.html',
     }),
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './src/pages/purchase-modal/purchase.html'),
-      filename: './pages/purchase.html',
-    }),
     new CleanWebpackPlugin(),
   ],
 };

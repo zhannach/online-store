@@ -3,6 +3,7 @@ import card from '../../assets/image/card.svg';
 import cardMaster from '../../assets/image/card-mastercard.svg';
 import cardAmex from '../../assets/image/card-american-express.svg';
 import { Flags, Cards, Inputs } from '../../components/types';
+import purchaseTemplate from './template';
 
 export const purchaseForm = () => {
   const creditCards: Cards = {
@@ -11,8 +12,12 @@ export const purchaseForm = () => {
     '4': cardVisa,
     '5': cardMaster,
   };
+  const root = document.getElementById('root') as HTMLDivElement;
+  const purchaseTemp = document.createElement('template') as HTMLTemplateElement;
+  purchaseTemp.innerHTML = purchaseTemplate;
+  const purchaseClone = purchaseTemp.content.cloneNode(true) as HTMLElement;
 
-  const spanIcon = document.querySelector('.card-icon') as HTMLInputElement;
+  const spanIcon = purchaseClone.querySelector('.card-icon') as HTMLInputElement;
 
   const inputs: Inputs = {
     name: queryInputs('.name-input'),
@@ -25,7 +30,7 @@ export const purchaseForm = () => {
   };
 
   function queryInputs(name: string): HTMLInputElement {
-    return document.querySelector(name) as HTMLInputElement;
+    return purchaseClone.querySelector(name) as HTMLInputElement;
   }
 
   function handleCardNumber(this: HTMLInputElement) {
@@ -118,5 +123,15 @@ export const purchaseForm = () => {
       }
     }
   }
-  document.querySelector<HTMLInputElement>('.proceed-btn')?.addEventListener('click', handleValidation);
+
+  function handleModal(event: MouseEvent) {
+    const target = event.target as HTMLDivElement;
+    const isClose = target.classList.contains('modal');
+    if (isClose) modal.remove();
+  }
+  const modal = purchaseClone.querySelector('.modal') as HTMLDivElement;
+  modal.addEventListener('click', (event) => handleModal(event));
+
+  purchaseClone.querySelector<HTMLInputElement>('.proceed-btn')?.addEventListener('click', handleValidation);
+  root.appendChild(purchaseClone);
 };

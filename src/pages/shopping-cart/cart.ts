@@ -2,15 +2,17 @@ import { Products } from '../../components/types';
 import { randomInt, arrayRemove } from '../../components/utils/utils';
 import { PromoNodes, PromoCodes } from '../../components/types';
 import cartTemplate from './template';
+import { purchaseForm as purchase } from '../purchase-modal/purchase';
 
 class Cart {
   private _data: Products[] = [];
-  private _subtotal!: HTMLDivElement;
-  private _total!: HTMLDivElement;
   private _discount = 0;
   private _quantityCart = 0;
-  private _cartItems: HTMLElement[] = [];
   private _queryFlag = true;
+
+  private _cartItems: HTMLElement[] = [];
+  private _subtotal!: HTMLDivElement;
+  private _total!: HTMLDivElement;
   private _container!: HTMLOListElement;
   private _headerTotal!: HTMLSpanElement;
   private _headerCart!: HTMLSpanElement;
@@ -64,6 +66,7 @@ class Cart {
     this.drawTotals();
     this.applyPromo();
     this.pagination();
+    this.purchase();
   }
 
   drawTotals() {
@@ -78,6 +81,14 @@ class Cart {
   }
 
   updateItem(amount: HTMLSpanElement, stock: HTMLSpanElement, btn: HTMLDivElement, total: HTMLDivElement, idx: number) {
+    const removeCartContainer = () => {
+      const root = document.getElementById('root') as HTMLDivElement;
+      root.style.textAlign = 'center';
+      root.style.fontSize = '2rem';
+      root.style.margin = '2rem auto';
+      root.innerHTML = `Cart is Empty`;
+    };
+
     const removeItem = (index: number): void => {
       const cartItem = this._data[index];
       const cartNode = this._cartItems[index];
@@ -85,6 +96,9 @@ class Cart {
       this._cartItems = arrayRemove(this._cartItems, cartNode);
       this._data = arrayRemove(this._data, cartItem);
       this.draw(this._data);
+      const isDataNull = this._data.length;
+      console.log(this._data.length);
+      if (!isDataNull) removeCartContainer();
     };
 
     const updateData = () => {
@@ -125,7 +139,7 @@ class Cart {
 
     let lastPromo: keyof PromoNodes;
 
-    //const promoTitleTempalte = `<h3 class="promo__title-code">Applied codes</h3>`;
+    //const promoTitleTemplate = `<h3 class="promo__title-code">Applied codes</h3>`;
 
     const inputPromo = document.querySelector('.price__promo') as HTMLInputElement;
     const totalPromo = document.querySelector('.cart-total__promo') as HTMLDivElement;
@@ -142,16 +156,16 @@ class Cart {
       node.append(button);
       if (type == 'Add') {
         totalPromo.after(node);
-        button.addEventListener('click', () => applyPromo(value, type));
+        button.addEventListener('click', () => setPromo(value, type));
       }
       if (type === 'Drop') {
         inputPromo.before(node);
-        button.addEventListener('click', () => applyPromo(value, type));
+        button.addEventListener('click', () => setPromo(value, type));
       }
       return node;
     };
 
-    const applyPromo = (value: keyof PromoNodes, type: string) => {
+    const setPromo = (value: keyof PromoNodes, type: string) => {
       if (type === 'Add') {
         const nodeAdd = promoAddList.pop();
         if (nodeAdd) nodeAdd[value].remove();
@@ -206,7 +220,6 @@ class Cart {
     const setCurrentPage = (pageNum: number): void => {
       if (pageNum <= 0) return;
       if (pageNum > pageCount) return;
-      console.log(pageCount, pageNum);
       currentPage = pageNum;
       pageNumber.textContent = `${currentPage}`;
       const prevRange = (pageNum - 1) * paginationLimit;
@@ -232,6 +245,11 @@ class Cart {
     nextBtn.addEventListener('click', () => setCurrentPage(currentPage + 1));
     paginationNumbers.addEventListener('change', handleItemsLimit);
     handleItemsLimit();
+  }
+
+  purchase() {
+    const buyBtn = document.querySelector('.btn__quick-buy') as HTMLButtonElement;
+    buyBtn.addEventListener('click', purchase);
   }
 }
 
