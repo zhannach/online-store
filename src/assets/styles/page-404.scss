@@ -1,0 +1,40 @@
+
+.content__not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.not-found__img {
+  background-image: url('../image/404.png');
+  width: 930px;
+  height: 545px;
+  border: white;
+}
+
+.not-found__title {
+  color: #152970;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 28px;
+  text-align: center;
+  margin: 40px 0;
+
+}
+
+.not-found__btn {
+  background-color: #FB2E86;
+  color: #fff;
+  height: 44px;
+  width: 165px;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 1.2rem;
+  align-self: center;
+  &:hover {
+    background-color: #cb1966;
+  }
+  &:focus {
+    background-color: #cb1966;
+  }
+}
