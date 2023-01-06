@@ -1,5 +1,5 @@
 import { Products } from '../../components/types';
-import { randomInt, arrayRemove } from '../../components/utils/utils';
+import { arrayRemove } from '../../components/utils/utils';
 import { PromoNodes, PromoCodes } from '../../components/types';
 import cartTemplate from './template';
 import { purchaseForm as purchase } from '../purchase-modal/purchase';
@@ -9,6 +9,7 @@ class Cart {
   private _discount = 0;
   private _quantityCart = 0;
   private _queryFlag = true;
+  private _promo: string[] = [];
 
   private _cartItems: HTMLElement[] = [];
   private _subtotal!: HTMLDivElement;
@@ -27,14 +28,16 @@ class Cart {
   }
 
   draw(products: Products[]) {
-    this._data = products;
-    if (this._queryFlag) this._queryFlag = this.query();
+    if (this._queryFlag) {
+      this._queryFlag = this.query();
+      this.getLocalStorage(products);
+    }
     const fragment = document.createDocumentFragment();
     const cartItemTemp = document.createElement('template');
     cartItemTemp.innerHTML = cartTemplate;
 
     this._data.forEach((item, idx) => {
-      item.quantity = 1 * randomInt(1, 5);
+      item.quantity = item.quantity ? item.quantity : 1;
       const cartClone = cartItemTemp.content.cloneNode(true) as HTMLElement;
       const amount = cartClone.querySelector('.cart-item__amount') as HTMLSpanElement;
       const btnPlus = cartClone.querySelector('.btn-plus') as HTMLDivElement;
@@ -66,7 +69,8 @@ class Cart {
     this.drawTotals();
     this.applyPromo();
     this.pagination();
-    this.purchase();
+    this.purchaseModal();
+    this.setLocalStorage().data;
   }
 
   drawTotals() {
@@ -96,8 +100,8 @@ class Cart {
       this._cartItems = arrayRemove(this._cartItems, cartNode);
       this._data = arrayRemove(this._data, cartItem);
       this.draw(this._data);
+      this.setLocalStorage().data;
       const isDataNull = this._data.length;
-      console.log(this._data.length);
       if (!isDataNull) removeCartContainer();
     };
 
@@ -124,28 +128,57 @@ class Cart {
         total.textContent = `${item.price * item.quantity}`;
       }
       this.drawTotals();
+      this.setLocalStorage().data;
     };
     btn.addEventListener('click', updateData);
   }
 
   applyPromo() {
+    //const promoTitleTemplate = `<h3 class="promo__title-code">Applied codes</h3>`;
+    let lastPromo: keyof PromoNodes;
+    const inputPromo = document.querySelector('.price__promo') as HTMLInputElement;
+    const totalPromo = document.querySelector('.cart-total__promo') as HTMLDivElement;
+    const priceSubTotals = document.querySelector('.price__subtotals') as HTMLDivElement;
     const promoAddList: PromoNodes[] = [];
     let promoDropList: PromoNodes[] = [];
-
     const promoData: PromoCodes = {
       rss: { desc: 'Rolling Scopes School - 10%', discount: 10 },
       epm: { desc: 'EPAM Systems - 10%', discount: 10 },
     };
+    const setPromo = (value: keyof PromoNodes, type: string) => {
+      if (type === 'Add') {
+        const nodeAdd = promoAddList.pop();
+        if (nodeAdd) nodeAdd[value].remove();
+        const nodeDrop = showPromo(value, 'Drop');
+        promoDropList.push({ [value]: nodeDrop });
+        this._promo = promoDropList.map((item) => Object.keys(item)[0]);
+        this.setLocalStorage().promo;
+        priceSubTotals.classList.add('line-through');
+        this._discount += promoData[value].discount;
+        this.drawTotals();
+      }
+      if (type === 'Drop') {
+        const nodeDrop = promoDropList.find((x) => x[value] instanceof HTMLElement);
+        if (nodeDrop) {
+          nodeDrop[value].remove();
+          promoDropList = arrayRemove(promoDropList, nodeDrop);
+          this._promo = promoDropList.map((item) => Object.keys(item)[0]);
+          this.setLocalStorage().promo;
+        }
+        this._discount -= promoData[value].discount;
+        this.drawTotals();
+        handlePromo.apply(inputPromo);
+        if (this._discount === 0) priceSubTotals.classList.remove('line-through');
+      }
+    };
 
-    let lastPromo: keyof PromoNodes;
+    if (this._promo.length) {
+      this._promo.forEach((item) => {
+        setPromo(item, 'Add');
+      });
+    }
 
-    //const promoTitleTemplate = `<h3 class="promo__title-code">Applied codes</h3>`;
-
-    const inputPromo = document.querySelector('.price__promo') as HTMLInputElement;
-    const totalPromo = document.querySelector('.cart-total__promo') as HTMLDivElement;
-    const priceSubTotals = document.querySelector('.price__subtotals') as HTMLDivElement;
-
-    const showPromo = (value: keyof PromoNodes, type: string): HTMLElement => {
+    function showPromo(value: keyof PromoNodes, type: string): HTMLElement {
       const node = document.createElement('div');
       const button = document.createElement('span');
 
@@ -163,30 +196,7 @@ class Cart {
         button.addEventListener('click', () => setPromo(value, type));
       }
       return node;
-    };
-
-    const setPromo = (value: keyof PromoNodes, type: string) => {
-      if (type === 'Add') {
-        const nodeAdd = promoAddList.pop();
-        if (nodeAdd) nodeAdd[value].remove();
-        const nodeDrop = showPromo(value, 'Drop');
-        promoDropList.push({ [value]: nodeDrop });
-        priceSubTotals.classList.add('line-through');
-        this._discount += promoData[value].discount;
-        this.drawTotals();
-      }
-      if (type === 'Drop') {
-        const nodeDrop = promoDropList.find((x) => x[value] instanceof HTMLElement);
-        if (nodeDrop) {
-          nodeDrop[value].remove();
-          promoDropList = arrayRemove(promoDropList, nodeDrop);
-        }
-        this._discount -= promoData[value].discount;
-        this.drawTotals();
-        handlePromo.apply(inputPromo);
-        if (this._discount === 0) priceSubTotals.classList.remove('line-through');
-      }
-    };
+    }
 
     function handlePromo(this: HTMLInputElement) {
       const value = this.value.trim().toLowerCase();
@@ -247,9 +257,33 @@ class Cart {
     handleItemsLimit();
   }
 
-  purchase() {
+  purchaseModal() {
     const buyBtn = document.querySelector('.btn__quick-buy') as HTMLButtonElement;
     buyBtn.addEventListener('click', purchase);
+  }
+
+  setLocalStorage() {
+    return {
+      data: localStorage.setItem('rss-online-cart-data', JSON.stringify(this._data)),
+      promo: localStorage.setItem('rss-online-cart-promo', JSON.stringify(this._promo)),
+    };
+  }
+
+  getLocalStorage(products: Products[]) {
+    const localData = localStorage.getItem('rss-online-cart-data');
+    if (localData) {
+      const cartData = JSON.parse(localData);
+      if (cartData.length) {
+        this._data = cartData;
+      } else this._data = products;
+    }
+    const localPromo = localStorage.getItem('rss-online-cart-promo');
+    if (localPromo) {
+      const cartPromo = JSON.parse(localPromo);
+      if (cartPromo.length) {
+        this._promo = cartPromo;
+      }
+    }
   }
 }
 
