@@ -9,7 +9,7 @@
   --shadow: rgba(0, 0, 0, 0.1);
   --green : #2ECC71;;
   --green-dark : #27AE60;
-}
+} 
 
 * {
   box-sizing: border-box;
@@ -23,14 +23,14 @@ html {
 
 body {
   margin: 0;
-  background-color: var(--white);
+  /* background-color: var(--white); */
   font-family: 'Roboto', sans-serif;
 }
 
 label {
   display: inline-block;
   margin-bottom: 0.5rem;
-  font-size: 0.85rem;
+  /* font-size: 0.85rem; */
 }
 
 /* Modal window, purchase cart & form*/

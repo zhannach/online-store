@@ -26,7 +26,7 @@ $text-color: #101750;
   line-height: 42px;
   color: #0D134E;
   font-weight: 600;
-  margin-top: 55px;
+  margin-top: 30px;
 }
 
 .item__content {
@@ -39,7 +39,6 @@ $text-color: #101750;
   flex-direction: column;
   justify-content: space-between;
   width: 60%;
-
 }
 
 .item__images {
@@ -48,10 +47,12 @@ $text-color: #101750;
 }
 
 .item__image-main {
-  background-image: url('../image/thumbnail.jpg');
+  background-image: url('../image/1.jpg');
   width: 320px;
-  margin: 150px 0 20px 0;
+  height: 280px;
+  margin: 100px 0 20px 0;
   background-size: contain;
+  background-position: center;
   background-repeat: no-repeat;
 }
 
@@ -63,19 +64,8 @@ $text-color: #101750;
   justify-content: space-between;
 }
 
-.item__image1 {
+.item__image {
   @include item-photo();
-  background-image: url('../image/thumbnail1.jpg');
-}
-
-.item__image2 {
-  @include item-photo();
-  background-image: url('../image/thumbnail1.jpg');
-}
-
-.item__image3 {
-  @include item-photo();
-  background-image: url('../image/thumbnail1.jpg');
 }
 
 .item__details {
@@ -86,7 +76,7 @@ $text-color: #101750;
   line-height: 1.5rem;
   font-size: 1.5rem;
   font-weight: 600;
-  margin: 30px 0;
+  margin: 20px 0;
   color: $text-color;
 }
 
@@ -95,53 +85,38 @@ $text-color: #101750;
   line-height: 29px;
   text-transform: capitalize;
   position: relative;
-
-  &::after {
-    content: url('../image/heart.png');
-    height: 60px;
-    width: 60px;
-    position: absolute;
-    top: -5px;
-    margin-left: 15px;
+  &:hover {
+    color: #8085a5;
   }
 }
 
-.item__add-to-cart.add {
-  &::after {
-    content: url('../image/heart-save.png');
-  }
+.svg__add-to-cart {
+  background-image:  url('../image/heart-save.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  height: 30px;
+  width: 60px;
+  position: absolute;
+  top: -5px;
+  margin-left: 15px;
 }
-
-.info__brend {}
-
-.brend__title {}
-
-.brend__name {}
-
-.info__category {}
-
-.category__title {}
-
-.category__name {}
 
 .description__text {
   font-weight: 500;
+  line-height: 2rem;
 }
-
-.info__amount {}
-
-.amount__title {}
-
-.amount__name {}
-
-.item__price {}
 
 .btn__quick-buy {
   background-color: #FB2E86;
   color: #fff;
-  height: 39px;
-  width: 135px;
+  height: 40px;
+  width: 150px;
   border-radius: 3px;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  margin: 20px 0;
+  &:hover {
+    background-color: #cb1966;
+  }
 }
