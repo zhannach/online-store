@@ -13,7 +13,6 @@
     rel="stylesheet">
   <title>Products catalog</title>
 </head>
-
 <body class="body__container">
   <header class="header__container">
     <div class="header__bar">
@@ -47,8 +46,18 @@
           </svg>
         </button>
       </div>
+      <nav class="nav-router__links">
+        <ul>
+          <li><a class="nav-link" href="/" onclick="router(event)">Online store home</a></li>
+          <li><a class="nav-link" href="/item" onclick="router(event)">Product Detail</a></li>
+          <li><a class="nav-link" href="/cart" onclick="router(event)">Cart</a></li>
+          <li><a class="nav-link" href="/purchase" onclick="router(event)">Purchase modal</a></li>
+          <li><a class="nav-link" href="/404" onclick="router(event)">404 Error</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
+
   <main class="main__container" id="root">
   </main>
   <footer class="footer__content">
@@ -62,3 +71,4 @@
 </body>
 
 </html>
+

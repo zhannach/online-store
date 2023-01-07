@@ -9,19 +9,21 @@
           </div>
           <!-- Person Name -->
           <div class="person-name">
-            <input type="text" class="name-input form-input" placeholder="Name" />
+            <input type="text" class="name-input form-input" placeholder="Name"
+                maxlength="30"/>
           </div>
           <!-- Person Phone -->
           <div class="person-phone">
-            <input type="text" class="phone-input form-input" placeholder="Phone number" />
+            <input type="text" class="phone-input form-input" placeholder="Phone number"
+                maxlength="20"/>
           </div>
           <!-- Person Address -->
           <div class="person-address">
-            <input type="text" class="address-input form-input" placeholder="Delivery address" />
+            <input type="text" class="address-input form-input" placeholder="Delivery address"/>
           </div>
           <!-- Person Email -->
           <div class="person-email">
-            <input type="email" class="email-input form-input" placeholder="E-mail" />
+            <input type="email" class="email-input form-input" placeholder="E-mail"/>
           </div>
         </div>
 
@@ -32,37 +34,45 @@
 
           <div class="card-body">
             <!-- Card Number -->
-            <div class="card-number__container">
+            <div class="input__container">
               <label for="card-number">
                 Card number :
               </label>
-              <input type="tel" id="card-number" class="card-number form-input" placeholder="XXXX  XXXX  XXXX  XXXX"
-                pattern="[0-9]*" autocomplete="cc-number" maxlength="12"/>
+              <div class="person-number">
+                <div class="card-ico__container">
+                  <input type="tel" id="card-number" class="card-input form-input" placeholder="XXXX XXXX XXXX XXXX"
+                  pattern="[0-9]*" autocomplete="cc-number" maxlength="16"/>
+                  <span for="card-number" class="card-icon"></span>
+                </div>
+              </div>
             </div>
 
             <!-- Card Verification Field -->
             <div class="card-verification">
 
-              <div class="cvv-input">
+              <div class="input__container">
                 <label for="card-exp">
                   Exp date :
                 </label>
-                <input type="tel" id="card-exp" type="text" placeholder="MM / YY"
-                  class="form-input" autocapitalize="cc-exp" pattern="[0-9]*" maxlength="4"/>
+                <div class="person-exp">
+                  <input type="tel" id="card-exp" type="text" placeholder="MM/YY"
+                  class="exp-input form-input" autocapitalize="cc-exp" pattern="[0-9]*" maxlength="5"/>
+                </div>
               </div>
 
-              <div class="cvv-input">
+              <div class="input__container">
                 <label for="card-cvv">
                   CVV :
                 </label>
-                <input type="tel" id="card-cvv" class="form-input" placeholder="XXX"
+                <div class="person-cvv">
+                  <input type="tel" id="card-cvv" class="form-input cvv-input" placeholder="XXX"
                   pattern="[0-9]*" autocomplete="cc-number" maxlength="3"/>
+                </div>
               </div>
-
             </div>
 
             <!-- Button -->
-            <button type="submit" class="proceed-btn"><a href="#">Proceed</a></button>
+            <button type="button" class="proceed-btn">Proceed</a></button>
           </div>
         </div>
 

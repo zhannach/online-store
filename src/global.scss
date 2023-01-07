@@ -10,8 +10,8 @@ $title-color: #101750;
 }
 
 ::-webkit-scrollbar {
-  width: 5px; 
-  height: 8px; 
+  width: 5px;
+  height: 8px;
   background-color: #F6F5FF;
 }
 
@@ -228,4 +228,10 @@ $title-color: #101750;
 .footer__date {
   font-size: 1.2rem;
   font-weight: 600;
+}
+
+//
+.nav-router__links {
+  position: absolute;
+  right: 0;
 }
