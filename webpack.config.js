@@ -36,11 +36,24 @@ const baseConfig = {
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, './dist'),
+    publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './src/index.html'),
       filename: 'index.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/pages/products/products.html'),
+      filename: './pages/products.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/pages/item/item.html'),
+      filename: './pages/item.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/pages/error404/error404.html'),
+      filename: './pages/error404.html',
     }),
     new CleanWebpackPlugin(),
   ],

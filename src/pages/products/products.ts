@@ -4,7 +4,7 @@ import 'nouislider/dist/nouislider.css';
 import '../../assets/styles/multiple-slider.scss';
 import { target } from 'nouislider';
 import { Product, ApiProductsResponse, Filter, FilterType } from '../../types/products';
-import { handleLinkRoute, RouterEvent } from '../../helpers/route';
+import { handleLinkRoute } from '../../helpers/route';
 
 export default class ProductsPage {
   sortFuncs: Map<string, (a: Product, b: Product) => number>;
@@ -52,7 +52,7 @@ export default class ProductsPage {
     this.allProducts = data.products;
     this.total = data.total;
     this.initFilters();
-    this.parseUrl('?category=smartphones/laptops/home-decoration');
+    this.parseUrl();
     this.filteredProducts = this.filterProducts();
     this.renderProducts();
     this.renderFilterSidebar();
@@ -182,14 +182,10 @@ export default class ProductsPage {
     }
     const links = this.allProductsContainer.querySelectorAll('a');
     [...links].forEach((link) => {
-      link.addEventListener('click', (e) => handleLinkRoute(e as unknown as RouterEvent));
+      link.addEventListener('click', handleLinkRoute);
     });
     this.allProductsContainer.querySelectorAll('.home-products__item').forEach((item) => {
       const addBtn = item.querySelector('.home-btn__add');
-      const image = item.querySelector('.home-item__image');
-      image?.addEventListener('click', (e) => {
-        handleLinkRoute(e as unknown as RouterEvent);
-      });
       addBtn?.addEventListener('click', () => {
         this.addProductToCart();
         addBtn.classList.add('in-cart');
@@ -353,9 +349,9 @@ export default class ProductsPage {
     history.pushState({}, '', url);
   }
 
-  parseUrl(queryString: string) {
+  parseUrl() {
+    const queryString = window.location.search
     const query: Map<string, string> = new Map();
-    //const queryString = window.location.search
     const pairs = (queryString[0] === '?' ? queryString.slice(1) : queryString).split('&');
     for (let i = 0; i < pairs.length; i++) {
       const pair = pairs[i].split('=');
@@ -384,5 +380,5 @@ export default class ProductsPage {
     }
   }
 
-  addProductToCart() {}
+  addProductToCart() { }
 }

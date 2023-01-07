@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <link type="image/x-icon" href="/heart (1).png" rel="icon"> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Open+Sans:ital,wght@0,300;0,600;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
     rel="stylesheet">
-  <title>Item-description</title>
+  <title>Products catalog</title>
 </head>
 
 <body class="body__container">
@@ -20,13 +22,13 @@
         <div class="contact__email">mhhasanul@gmail.com</div>
       </div>
       <div class="header__cart-total">
-        Card total:
+        Cart total:
         <span class="cart__sum">$0,00</span>
       </div>
       <a href="#" class="header__cart"></a>
     </div>
     <div class="header__nav-bar">
-      <h1><a href="#" class="header__name">Online Store</a></h1>
+      <h1><a href="/" class="header__name">Online Store</a></h1>
       <div class="header__search">
         <input type="search" class="search__input" placeholder="Search" aria-label="Search"
           aria-describedby="button-addon2">
@@ -47,53 +49,7 @@
       </div>
     </div>
   </header>
-  <main class="main__container">
-    <section class="category">
-      <h2 class="category__title">Product Details</h2>
-      <ul class="item__navbar">
-        <li><a href="#" class="navbar__link">STORE</a></li>
-        <li><span class="separator">.</span></li>
-        <li><a href="#" class="navbar__link">SMARTPHONES</a></li>
-        <li><span class="separator">.</span></li>
-        <li><a href="#" class="navbar__link">APPLE</a></li>
-        <li><span class="separator">.</span></li>
-        <li><a href="#" class="navbar__link-current">IPHONE 9</a></li>
-      </ul>
-    </section>
-    <section class="item">
-      <div class="item__images">
-        <div class="item__image-slider">
-          <div class="item__image1"></div>
-          <div class="item__image2"></div>
-          <div class="item__image3"></div>
-        </div>
-        <div class="item__image-main"></div>
-      </div>
-      <section class="item__details">
-        <h3 class="item__title">iPhone 9</h3>
-        <div class="item__detail">
-          <div class="count__value">€549.00</div>
-        </div>
-        <div class="item__detail">
-          Brand:
-            <span class="brend__name">Apple</span>
-        </div>
-        <div class="item__detail">
-          Category:
-          <span class="category__name">smartphones</span>
-        </div>
-        <div class="item__add-to-cart">Add to cart</div>
-        <div class="item__detail">
-          Description:
-          <span class="description__text">An apple mobile which is nothing like apple</span>
-        </div>
-        <div class="item__detail">
-          Stock:
-          <span class="amount__name">50</span>
-        </div>
-        <button class="btn btn__quick-buy">Buy now</button>
-      </section>
-    </section>
+  <main class="main__container" id="root">
   </main>
   <footer class="footer__content">
     <a href="https://rs.school/js/" class="footer__logo"></a>

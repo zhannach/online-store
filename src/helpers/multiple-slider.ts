@@ -7,7 +7,9 @@ export type RangeSliderParams = {
   textPrefix: string;
   minValue: number;
   maxValue: number;
-  callback?: () => void
+  startValue: number;
+  endValue: number;
+  callback?: () => void;
 };
 
 export default function rangeSliderInit({
@@ -16,6 +18,8 @@ export default function rangeSliderInit({
   textPrefix,
   minValue,
   maxValue,
+  startValue,
+  endValue,
   callback,
 }: RangeSliderParams) {
   const range = parentEl.querySelector(sliderSelector) as target;
@@ -24,7 +28,7 @@ export default function rangeSliderInit({
   const inputs: Array<HTMLInputElement> = [inputMin, inputMax];
   noUiSlider.cssClasses.target += ' range-slider';
   noUiSlider.create(range, {
-    start: [minValue, maxValue],
+    start: [startValue, endValue],
     connect: true,
     range: {
       min: minValue,
@@ -35,7 +39,7 @@ export default function rangeSliderInit({
     tooltips: {
       to: function (num) {
         return textPrefix + num.toFixed(0);
-      }
+      },
     },
     format: {
       to: function (value: number): number {
@@ -48,9 +52,9 @@ export default function rangeSliderInit({
   });
 
   range.noUiSlider?.on('change', function (values: (number | string)[], handleNumber: number) {
-    console.log(values)
+    console.log(values);
     inputs[handleNumber].value = Number(values[handleNumber]).toFixed(0);
-    if (callback) callback()
+    if (callback) callback();
   });
 
   // inputMin.addEventListener('change', function () {

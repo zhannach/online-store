@@ -1,6 +1,6 @@
 import { Product } from '../../types/products';
 import interpolate from '../../helpers/interpolate';
-import { handleLinkRoute, RouterEvent } from '../../helpers/route';
+import { handleLinkRoute, redirectTo } from '../../helpers/route';
 
 export default class ItemPage {
   item: Product | null;
@@ -38,12 +38,15 @@ export default class ItemPage {
     });
 
     const navBarLink = document.querySelector('.navbar__link') as HTMLLinkElement
-    navBarLink.addEventListener('click', (e) => handleLinkRoute(e as unknown as RouterEvent))
+    navBarLink.addEventListener('click', handleLinkRoute)
+
+    const btnQuickBuy = document.querySelector('.btn__quick-buy')  as HTMLButtonElement
+    btnQuickBuy.addEventListener('click', () => redirectTo('http://localhost:8080/', 'cart'))
   }
 
   renderItem() {
     const template = document.querySelector('#item-template') as HTMLTemplateElement;
-    console.log(this.item);
+    console.log(this.mainContainerEl, template, this.item);
     this.mainContainerEl.innerHTML = interpolate(template.innerHTML, { item: this.item });
   }
 
