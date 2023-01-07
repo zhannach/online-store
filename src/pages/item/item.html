@@ -1,41 +1,72 @@
-    <section class="category">
-      <h2 class="category__title">Product Details</h2>
-      <ul class="item__navbar">
-        <li><a href="#" class="navbar__link">STORE</a></li>
-        <li><span class="separator">.</span></li>
-        <li><a href="#" class="navbar__link">SMARTPHONES</a></li>
-        <li><span class="separator">.</span></li>
-        <li><a href="#" class="navbar__link">APPLE</a></li>
-        <li><span class="separator">.</span></li>
-        <li><a href="#" class="navbar__link-current">IPHONE 9</a></li>
-      </ul>
-    </section>
-    <section class="item">
-      <div class="item__images">
-        <div class="item__image-main"></div>
-        <div class="item__image-slider">
-          <div class="item__image"></div>
-          <div class="item__image"></div>
-        </div>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Open+Sans:ital,wght@0,300;0,600;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+    rel="stylesheet">
+  <title>Item-description</title>
+</head>
+
+<body class="body__container">
+  <main class="main__container">
+  </main>
+</body>
+<template id="item-template">
+  <section class="category">
+    <h2 class="category__title">Product Details</h2>
+    <ul class="item__navbar">
+      <li><a href="/" class="navbar__link">STORE</a></li>
+      <li><span class="separator">.</span></li>
+      <li><span class="navbar__link">${item.category.toUpperCase()}</span></li>
+      <li><span class="separator">.</span></li>
+      <li><span class="navbar__link">${item.brand.toUpperCase()}</span></li>
+      <li><span class="separator">.</span></li>
+      <li><span class="navbar__link-current">${item.title.toUpperCase()}</span></li>
+    </ul>
+  </section>
+  <section class="item">
+    <div class="item__images">
+      <div class="item__image-slider">
+        <div class="item__image" style="background-image: url(${item.images[0]})"></div>
+        <div class="item__image" style="background-image: url(${item.images[1]})"></div>
+        <div class="item__image" style="background-image: url(${item.images[2]})"></div>
       </div>
-      <section class="item__details">
-        <h3 class="item__title">iPhone 9</h3>
-        <div class="item__detail">
-          <h3 class="brend__title">Brand:</h3>
-          <div class="brend__name">Apple</div>
-        </div>
-        <div class="item__detail">
-          <h3 class="category__title">Category:</h3>
-          <div class="category__name">smartphones</div>
-        </div>
-        <div class="item__detail">
-          <h3 class="description__title">Description:</h3>
-          <p class="description__text">An apple mobile which is nothing like apple</p>
-        </div>
-        <div class="item__detail">
-          <h3 class="amount__title">Stock:</h3>
-          <div class="amount__name">50</div>
-        </div>
-        <button class="btn btn__quick-buy"></button>
-      </section>
+      <div class="item__image-main" style="background-image: url(${item.thumbnail})"></div>
+    </div>
+    <section class="item__details">
+      <h3 class="item__title">${item.title}</h3>
+      <div class="item__detail">
+        <div class="count__value">$${item.price}</div>
+      </div>
+      <div class="item__detail">
+        Brand:
+        <span class="brend__name">${item.brand}</span>
+      </div>
+      <div class="item__detail">
+        Category:
+        <span class="category__name">${item.category}</span>
+      </div>
+      <div class="item__add-to-cart">Add to cart
+        <span class="svg__add-to-cart"></span>
+      </div>
+      <div class="item__detail">
+        Description:
+        <span class="description__text">${item.description}</span>
+      </div>
+      <div class="item__detail">
+        Stock:
+        <span class="amount__name">${item.stock}</span>
+      </div>
+      <button class="btn btn__quick-buy">Buy now</button>
     </section>
+  </section>
+</template>
+
+</html>

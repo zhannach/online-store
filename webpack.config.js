@@ -36,6 +36,7 @@ const baseConfig = {
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, './dist'),
+    publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -43,6 +44,10 @@ const baseConfig = {
       filename: 'index.html',
     }),
     new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/pages/products/products.html'),
+      filename: './pages/products.html',
+    }),
+      new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './src/pages/shopping-cart/cart.html'),
       filename: './pages/cart.html',
     }),
@@ -53,10 +58,6 @@ const baseConfig = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './src/pages/item/item.html'),
       filename: './pages/item.html',
-    }),
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './src/pages/main/main-page.html'),
-      filename: './pages/main-page.html',
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './src/pages/purchase-modal/purchase.html'),

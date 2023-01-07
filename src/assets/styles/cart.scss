@@ -28,7 +28,6 @@ $title-color: #101750;
 .cart-items {
   flex: 0 1 70%;
   margin-right: 40px;
-
 }
 
 .cart-items__titles {
@@ -68,29 +67,12 @@ $title-color: #101750;
 }
 
 .cart-item__image {
-  background-image: url('../image/thumbnail1.jpg');
   width: 120px;
   height: 80px;
   background-size: contain;
   background-repeat: no-repeat;
   margin-right: 10px;
 }
-
-.item__title {}
-
-.item__detail {}
-
-.brend__title {}
-
-.brend__name {}
-
-.category__title {}
-
-.category__name {}
-
-.amount__title {}
-
-.amount__name {}
 
 .cart-item__price {
   font-size: 1.2rem;
@@ -118,12 +100,6 @@ $title-color: #101750;
   }
 }
 
-.btn-minus {}
-
-.btn-plus {}
-
-.btn {}
-
 .cart-item__amount {
   color: #78797b;
   font-weight: 600;
@@ -137,7 +113,6 @@ $title-color: #101750;
   font-weight: 600;
   box-sizing: border-box;
 }
-
 
 // cart pagination
 .cart-item__pagination {
@@ -163,10 +138,7 @@ $title-color: #101750;
   }
 }
 
-
-
-
-// cart-total___________
+// cart-total
 
 .cart-total {
   flex: 0 1 30%;
@@ -238,7 +210,3 @@ $title-color: #101750;
   visibility: hidden;
   margin: 10px 0;
 }
-
-.btn {}
-
-.btn__quick-buy {}
