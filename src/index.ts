@@ -3,7 +3,6 @@ import './pages/purchase-modal/purchase';
 import './global.scss';
 import './assets/styles/item.scss';
 import './assets/styles/cart.scss';
-import './assets/styles/main-page.scss';
 import './assets/styles/purchase-modal.css';
 import './assets/styles/products.scss';
 import './assets/styles/page-404.scss';
