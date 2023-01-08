@@ -2,7 +2,7 @@ import cardVisa from '../../assets/image/card-visa.svg';
 import card from '../../assets/image/card.svg';
 import cardMaster from '../../assets/image/card-mastercard.svg';
 import cardAmex from '../../assets/image/card-american-express.svg';
-import { Flags, Cards, Inputs } from '../../components/types';
+import { Flags, Cards, Inputs } from '../../types/cart';
 import purchaseTemplate from './template';
 
 export const purchaseForm = () => {

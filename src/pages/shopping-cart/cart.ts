@@ -1,6 +1,6 @@
-import { Products } from '../../components/types';
-import { arrayRemove } from '../../components/utils/utils';
-import { PromoNodes, PromoCodes } from '../../components/types';
+import { Products } from '../../types/cart';
+import { arrayRemove } from '../../helpers/utils';
+import { PromoNodes, PromoCodes } from '../../types/cart';
 import cartTemplate from './template';
 import { purchaseForm as purchase } from '../purchase-modal/purchase';
 
