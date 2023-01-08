@@ -74,11 +74,33 @@ $title-color: #101750;
   margin-right: 10px;
 }
 
+.item__title {}
+
+.item__detail {}
+
+.brand__title {}
+
+.brand__name {}
+
+.category__title {}
+
+.category__name {}
+
+.amount__title {}
+
+.amount__name {}
+
+.cart-item__id,
 .cart-item__price {
   font-size: 1.2rem;
   line-height: 16px;
   color: $title-color;
   font-weight: 600;
+}
+
+.cart-item__id {
+  padding: 0 1rem;
+  align-self: center;
 }
 
 .cart-item__quantity {
@@ -115,14 +137,33 @@ $title-color: #101750;
 }
 
 // cart pagination
+.pagination__limit,
 .cart-item__pagination {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .pagination__page {
-  position: relative;
   transition: all 0.3s;
+  align-items: center;
+}
+
+.pagination__limit {
+  padding: 12px;
+  display: flex;
+  color: #78797b;
+  font-weight:700;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.pagination__limit-index {
+  background-color: #F0EFF2;
+  font-size: 110%;
+  width: 2.5rem;
+  text-align: center;
+  border: solid 2px #E7E6EF;
 }
 
 .pagination__link {
@@ -136,6 +177,11 @@ $title-color: #101750;
     background-color: #F0EFF2;
     transition: all 0.2s ease-in;
   }
+}
+
+.link-prev,
+.link-next {
+  cursor: pointer;
 }
 
 // cart-total
@@ -153,7 +199,6 @@ $title-color: #101750;
 .cart-total__price {
   background-color: #E8E6F1;
   width: 300px;
-  height: 250px;
   padding: 20px 30px;
 }
 
@@ -192,6 +237,11 @@ $title-color: #101750;
   }
 }
 
+.price__totals,
+.price__subtotals {
+  display: flex;
+}
+
 .price__promo {
   border: solid 2px #E7E6EF;
   height: 30px;
@@ -207,6 +257,34 @@ $title-color: #101750;
 .cart-total__promo {
   font-size: 1rem;
   color: #78797b;
+  margin: 10px auto;
+}
+
+.promo__add-code,
+.promo__title-code {
+  margin: 10px auto;
+  position: relative;
+  span {
+    display: inline-block;
+    border: 1px solid #c1bbd9;
+    padding: 0.25rem;
+    cursor: pointer;
+  }
+}
+
+.promo__title-code {
+  text-align: center;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
+.btn {}
+
+.btn__quick-buy {}
+
+.hidden {
   visibility: hidden;
   margin: 10px 0;
 }

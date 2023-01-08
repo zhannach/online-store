@@ -14,7 +14,7 @@
 
 /* Modal window, purchase cart & form*/
 
-/* .modal {
+.modal {
   position: fixed;
   z-index: 1;
   left: 0;
@@ -23,11 +23,9 @@
   height: 100%;
   overflow: auto;
   background-color: var(--shadow);
-}
- */
- 
-.modal-content {
-  margin: 10% auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .purchase-cart {

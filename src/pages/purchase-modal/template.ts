@@ -1,3 +1,4 @@
+const purchaseTemplate = `
 <div class="modal">
   <div class="modal-content">
     <div class="purchase-cart">
@@ -87,4 +88,6 @@
       </form>
     </div>
   </div>
-</div>
+</div>`;
+
+export default purchaseTemplate;

@@ -98,6 +98,9 @@ $title-color: #101750;
 }
 
 .header__cart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-image: url('./assets/image/shopping-cart.png');
   height: 60px;
   width: 60px;
@@ -105,6 +108,22 @@ $title-color: #101750;
   background-repeat: no-repeat;
   color: #fff;
 }
+
+.cart__num-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: 45%;
+  height: 45%;
+  margin-left: 10px;
+  border-radius: 50%;
+  border: 1px solid #c1bbd9;
+  background-color: #cb1966;
+}
+
+.cart__num {}
 
 .header__name {
   font-weight: 700;
