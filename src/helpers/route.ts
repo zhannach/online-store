@@ -1,5 +1,6 @@
-import ProductsPage from "../pages/products/products";
-import ItemPage from "../pages/item/item";
+import ProductsPage from '../pages/products/products';
+import ItemPage from '../pages/item/item';
+import Cart from '../pages/shopping-cart/cart';
 
 type Routes = { [pattern: string]: string };
 
@@ -15,16 +16,19 @@ const root = document.getElementById('root') as HTMLDivElement;
 
 export default async function handleLocation() {
   const path = window.location.pathname;
-  const itemPageMatched = path.match(/^\/item\/([0-9]+)$/i)
+  const itemPageMatched = path.match(/^\/item\/([0-9]+)$/i);
   const route = routes[itemPageMatched ? '/item' : path] || routes['/404'];
   const html = await fetch(route).then((data) => data.text());
   root.innerHTML = html;
   if (itemPageMatched) {
-    return new ItemPage().run(itemPageMatched[1])
+    return new ItemPage().run(itemPageMatched[1]);
   }
   if (path === '/') {
-    return new ProductsPage().run()
+    return new ProductsPage().run();
   }
+  /*   if (path == '/cart') {
+    return new Cart().draw();
+  } */
 }
 
 export function handleLinkRoute(event: Event) {
@@ -36,7 +40,7 @@ export function handleLinkRoute(event: Event) {
   }
 }
 
-export function redirectTo(link: string, title: string = '') {
+export function redirectTo(link: string, title = '') {
   history.pushState({}, title, link);
   handleLocation();
 }

@@ -223,8 +223,18 @@ class Cart {
     const prevBtn = document.querySelector('.link-prev') as HTMLDivElement;
     const nextBtn = document.querySelector('.link-next') as HTMLDivElement;
 
-    let paginationLimit = 0;
-    let currentPage = 1;
+    let url = window.location.pathname;
+    const params = new URLSearchParams(window.location.search);
+    const queryString = window.location.search;
+
+    let paginationLimit = Number(params.get('limit'));
+    if (!paginationLimit) paginationLimit = 5;
+    paginationNumbers.value = `${paginationLimit}`;
+
+    let currentPage = Number(params.get('page'));
+    if (!currentPage || currentPage > Math.ceil(this._cartItems.length / paginationLimit)) {
+      currentPage = 1;
+    }
     let pageCount = 0;
 
     const setCurrentPage = (pageNum: number): void => {
@@ -232,6 +242,8 @@ class Cart {
       if (pageNum > pageCount) return;
       currentPage = pageNum;
       pageNumber.textContent = `${currentPage}`;
+      url = `?page=${currentPage}&limit=${paginationLimit}`;
+      history.pushState({}, '', url);
       const prevRange = (pageNum - 1) * paginationLimit;
       const currRange = pageNum * paginationLimit;
       this._cartItems.forEach((item, index) => {
@@ -242,14 +254,18 @@ class Cart {
       });
     };
     const handleItemsLimit = () => {
-      if (paginationNumbers && Number(paginationNumbers.value.trim()) > 0) {
-        paginationLimit = Number(paginationNumbers.value.trim());
+      const value = Number(paginationNumbers.value.trim());
+      console.log(value);
+      if (value && value < 10) {
+        paginationLimit = value;
       } else {
-        paginationLimit = 3;
+        paginationLimit = 5;
         paginationNumbers.value = `${paginationLimit}`;
       }
+      url = `?page=${currentPage}&limit=${paginationLimit}`;
+      history.pushState({}, '', url);
       pageCount = Math.ceil(this._cartItems.length / paginationLimit);
-      setCurrentPage(1);
+      setCurrentPage(currentPage);
     };
     prevBtn.addEventListener('click', () => setCurrentPage(currentPage - 1));
     nextBtn.addEventListener('click', () => setCurrentPage(currentPage + 1));

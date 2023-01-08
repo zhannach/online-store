@@ -58,6 +58,7 @@ $title-color: #101750;
   height: 60px;
   left: 0px;
   top: 0px;
+  padding: 0 30px;
 }
 
 .header__contact {
@@ -67,7 +68,7 @@ $title-color: #101750;
   line-height: 1.5rem;
   letter-spacing: 0em;
   text-align: left;
-  margin: 10px 30px;
+  margin: 10px 0;
 }
 
 .contact__phone{
@@ -104,9 +105,9 @@ $title-color: #101750;
   background-image: url('./assets/image/shopping-cart.png');
   height: 60px;
   width: 60px;
-  margin-right: 30px;
   background-repeat: no-repeat;
   color: #fff;
+  cursor: pointer;
 }
 
 .cart__num-container {
