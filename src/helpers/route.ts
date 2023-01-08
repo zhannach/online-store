@@ -28,8 +28,8 @@ export default async function handleLocation() {
 }
 
 export function handleLinkRoute(event: Event) {
-  event.preventDefault();
   if (event.target && event.target instanceof HTMLAnchorElement) {
+    event.preventDefault();
     history.pushState({}, event.target.title || 'newUrl', event.target.href);
     handleLocation();
     navColorLink();
