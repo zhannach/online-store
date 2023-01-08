@@ -214,11 +214,7 @@ $title-color: #101750;
   margin: 0 15px;
 }
 
-
-
-
 //____ footer style
-
 
 .footer__content {
   @include container;
@@ -232,12 +228,12 @@ $title-color: #101750;
   margin: 10px 30px;
   width: 120px;
   background-repeat: no-repeat;
-
 }
 
 .footer__links {
   margin-right: 30px;
 }
+
 .footer__link {
   &:after{
     content: url('./assets/image/svg/git-logo.svg');

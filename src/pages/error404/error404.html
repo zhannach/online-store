@@ -1,2 +1,111 @@
-<h1>Welcome to 404 page.</h1>
-<p>A 404 page is a common web page on a website for visitors that mistyped url in address bar.</p>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <link type="image/x-icon" href="/heart (1).png" rel="icon"> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Open+Sans:ital,wght@0,300;0,600;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+    rel="stylesheet">
+  <title>Products catalog</title>
+</head>
+
+<body class="body__container">
+  <header class="header__container">
+    <div class="header__bar">
+      <div class="header__contact">
+        <div class="contact__phone">(12345)67890</div>
+        <div class="contact__email">mhhasanul@gmail.com</div>
+      </div>
+      <div class="header__cart-total">
+        Card total:
+        <span class="cart__sum">$0,00</span>
+      </div>
+      <a href="#" class="header__cart"></a>
+    </div>
+    <div class="header__nav-bar">
+      <h1><a href="#" class="header__name">Online Store</a></h1>
+      <div class="header__search">
+        <input type="search" class="search__input" placeholder="Search" aria-label="Search"
+          aria-describedby="button-addon2">
+        <button class="search__button" type="button" id="button-addon2">
+          <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M20.7094 19.2899L16.9994 15.6099C18.4395 13.8143 19.1369 11.5352 18.9482 9.2412C18.7595 6.94721 17.6991 4.81269 15.9849 3.27655C14.2708 1.74041 12.0332 0.919414 9.73234 0.982375C7.43145 1.04534 5.24214 1.98747 3.61456 3.61505C1.98698 5.24263 1.04485 7.43194 0.981887 9.73283C0.918926 12.0337 1.73992 14.2713 3.27606 15.9854C4.8122 17.6996 6.94672 18.76 9.24072 18.9487C11.5347 19.1374 13.8138 18.44 15.6094 16.9999L19.2894 20.6799C19.3824 20.7736 19.493 20.848 19.6148 20.8988C19.7367 20.9496 19.8674 20.9757 19.9994 20.9757C20.1314 20.9757 20.2621 20.9496 20.384 20.8988C20.5059 20.848 20.6165 20.7736 20.7094 20.6799C20.8897 20.4934 20.9904 20.2442 20.9904 19.9849C20.9904 19.7256 20.8897 19.4764 20.7094 19.2899ZM9.99942 16.9999C8.61495 16.9999 7.26157 16.5894 6.11042 15.8202C4.95928 15.051 4.06207 13.9578 3.53226 12.6787C3.00245 11.3996 2.86382 9.99214 3.13392 8.63427C3.40402 7.27641 4.0707 6.02912 5.04967 5.05016C6.02864 4.07119 7.27592 3.4045 8.63378 3.13441C9.99165 2.86431 11.3991 3.00293 12.6782 3.53275C13.9573 4.06256 15.0505 4.95977 15.8197 6.11091C16.5889 7.26206 16.9994 8.61544 16.9994 9.9999C16.9994 11.8564 16.2619 13.6369 14.9492 14.9497C13.6364 16.2624 11.8559 16.9999 9.99942 16.9999Z"
+              fill="url(#paint0_linear_303_2181)" />
+            <defs>
+              <linearGradient id="paint0_linear_303_2181" x1="0.978516" y1="0.979004" x2="24.4283" y2="15.376"
+                gradientUnits="userSpaceOnUse">
+                <stop stop-color="#F3F9FF" />
+                <stop offset="1" stop-color="#F1F0FF" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+  <main class="main__container">
+    <section class="category">
+      <h2 class="category__title">404 Not Found</h2>
+      <ul class="item__navbar">
+        <li><a href="#" class="navbar__link">STORE</a></li>
+        <li><span class="separator">.</span></li>
+        <li><a href="#" class="navbar__link-current">404 Not Found</a></li>
+        <li><span class="separator">.</span></li>
+      </ul>
+    </section>
+    <section class="main__content">
+      <div class="content__not-found">
+        <img class="not-found__img">
+        <h3 class="not-found__title">ooPs! The page you requested was not found!</h3>
+        <button class="not-found__btn btn">Back to Home</button>
+      </div>
+    </section>
+  </main>
+  <footer class="footer__content">
+    <a href="https://rs.school/js/" class="footer__logo"></a>
+    <div class="footer__links">
+      <a href="https://github.com/zhannach" class="footer__link"></a>
+      <a href="https://github.com/sepulator" class="footer__link"></a>
+      <p class="footer__date">2022/2023</p>
+    </div>
+  </footer>
+  <template id="item-template">
+    <section class="home-products__item">
+      <div class="home-item__image" style="background-image: url(${item.thumbnail})"></div>
+      <div class="home-item__details">
+        <a href="#" class="home-item__title">${item.title}</a>
+        <div class="home-item__detail">
+          <div class="count__value">$${item.price}</div>
+        </div>
+        <div class="home-item__detail">
+          Brand:
+          <span class="brend__name">${item.brand}</span>
+        </div>
+        <div class="home-item__detail">
+          Category:
+          <span class="category__name">${item.category}</span>
+        </div>
+        <div class="home-item__detail">
+          Description:
+          <span class="description__text">${item.description}</span>
+        </div>
+        <div class="home-item__detail">
+          Stock:
+          <span class="amount__name">${item.stock}</span>
+        </div>
+        <button class="home-btn__add"></button>
+        <button class="home-btn__detail"></button>
+      </div>
+
+    </section>
+  </template>
+</body>
+
+</html>
