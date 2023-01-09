@@ -1,25 +1,3 @@
-export type Products = {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: Array<string>;
-  quantity: number;
-};
-
-export type SourceProducts = {
-  products: Array<Products>;
-  total: number;
-  skip: number;
-  limit: number;
-};
-
 export type Nullable<T> = T | null;
 
 export type Flags = {

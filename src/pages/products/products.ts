@@ -4,30 +4,34 @@ import 'nouislider/dist/nouislider.css';
 import '../../assets/styles/multiple-slider.scss';
 import { target } from 'nouislider';
 import { Product, ApiProductsResponse, Filter, FilterType } from '../../types/products';
-import { handleLinkRoute } from '../../helpers/route';
+import { Router } from '../../helpers/router';
+import Cart from '../../helpers/cart';
 
 export default class ProductsPage {
-  sortFuncs: Map<string, (a: Product, b: Product) => number>;
-  allProducts: Product[];
-  filteredProducts: Product[];
-  total = 1;
-  filters: Filter[];
-  allProductsContainer: HTMLElement;
-  searchInputEl: HTMLInputElement;
-  sortSelectEl: HTMLSelectElement;
-  viewModeEls: NodeListOf<HTMLButtonElement>;
-  foundAmount: HTMLElement;
+  private sortFuncs: Map<string, (a: Product, b: Product) => number>;
+  private allProducts: Product[] = [];
+  private filteredProducts: Product[] = [];
+  private total = 1;
+  private filters: Filter[] = [];
+  private allProductsContainer: HTMLElement;
+  private searchInputEl: HTMLInputElement;
+  private sortSelectEl: HTMLSelectElement;
+  private viewModeEls: NodeListOf<HTMLButtonElement>;
+  private foundAmount: HTMLElement;
+  private itemTemplate: HTMLTemplateElement;
+  private cart: Cart;
+  private router: Router;
 
-  constructor() {
-    this.allProducts = [];
-    this.filteredProducts = [];
-    this.filters = [];
+  constructor(cart: Cart, router: Router) {
+    this.cart = cart;
+    this.router = router;
     this.sortFuncs = new Map([
       ['price-asc', (a: Product, b: Product) => a.price - b.price],
       ['price-desc', (a: Product, b: Product) => b.price - a.price],
       ['popularity-asc', (a: Product, b: Product) => a.rating - b.rating],
       ['popularity-desc', (a: Product, b: Product) => b.rating - a.rating],
     ]);
+    this.itemTemplate = document.querySelector('#item-template') as HTMLTemplateElement;
     this.allProductsContainer = document.querySelector('.home-products__items') as HTMLElement;
     this.searchInputEl = document.querySelector('.sort-products__search-input') as HTMLInputElement;
     this.sortSelectEl = document.querySelector('.home__sort-bar') as HTMLSelectElement;
@@ -126,9 +130,7 @@ export default class ProductsPage {
     const filterSection = document.querySelector('.home-products__filters') as HTMLElement;
     const allInputs = filterSection.querySelectorAll('input') as NodeList;
     allInputs.forEach((input) => {
-      input.addEventListener('change', () => {
-        this.filter();
-      });
+      input.addEventListener('change', () => this.filter());
     });
     const searchBtnEl = document.querySelector('.sort-products__search-btn') as HTMLButtonElement;
     searchBtnEl.addEventListener('click', () => this.filter());
@@ -169,9 +171,8 @@ export default class ProductsPage {
 
   // render data allProducts on the page
   renderProducts() {
-    const template = document.querySelector('#item-template') as HTMLTemplateElement;
-    const productCards: string[] = this.filteredProducts.map((item) => {
-      return interpolate(template.innerHTML, { item });
+    const productCards: string[] = this.filteredProducts.map((item, index) => {
+      return interpolate(this.itemTemplate.innerHTML, { index, item });
     });
     if (productCards.length > 0) {
       this.foundAmount.innerText = `${productCards.length}`;
@@ -182,13 +183,21 @@ export default class ProductsPage {
     }
     const links = this.allProductsContainer.querySelectorAll('a');
     [...links].forEach((link) => {
-      link.addEventListener('click', handleLinkRoute);
+      link.addEventListener('click', (e) => this.router.handleLinkRoute(e));
     });
-    this.allProductsContainer.querySelectorAll('.home-products__item').forEach((item) => {
+    this.allProductsContainer.querySelectorAll('.home-products__item').forEach((item, index) => {
+      // const index = Number(item.getAttribute('data-index'))
+      const product = this.filteredProducts[index]
       const addBtn = item.querySelector('.home-btn__add');
+      if (addBtn && this.cart.inCart(product)) {
+        addBtn.className = 'home-btn__add in-cart';
+      }
       addBtn?.addEventListener('click', () => {
-        this.addProductToCart();
+        if (this.cart.inCart(product)) {
+          return this.router.redirectTo('/cart')
+        }
         addBtn.classList.add('in-cart');
+        this.cart.add(product)
       });
     });
   }
@@ -380,5 +389,6 @@ export default class ProductsPage {
     }
   }
 
-  addProductToCart() { }
+  addProductToCart() {
+  }
 }

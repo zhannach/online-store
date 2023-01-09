@@ -13,6 +13,7 @@
     rel="stylesheet">
   <title>Products catalog</title>
 </head>
+
 <body class="body__container">
   <header class="header__container">
     <div class="header__bar">
@@ -24,13 +25,13 @@
         Cart total:
         <span class="cart__sum"></span>
       </div>
-      <a href="/cart" onclick="handleLinkRoute(event)" title="Shopping Cart">
-        <div class="header__cart">
-          <div class="cart__num-container">
-            <span class="cart__num"></span>
-          </div>
+      <div class="header__cart">
+        <div class="cart__num-container">
+          <a href="/cart" class="cart__num-link">
+            <span class="cart__num">0</span>
+          </a>
         </div>
-      </a>
+      </div>
     </div>
     <div class="header__nav-bar">
       <h1><a href="/" class="header__name">Online Store</a></h1>
@@ -55,8 +56,7 @@
     </div>
   </header>
 
-  <main class="main__container" id="root">
-  </main>
+  <main class="main__container" id="root"></main>
   <footer class="footer__content">
     <a href="https://rs.school/js/" class="footer__logo"></a>
     <div class="footer__links">
@@ -68,4 +68,3 @@
 </body>
 
 </html>
-

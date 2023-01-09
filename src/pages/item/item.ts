@@ -1,13 +1,17 @@
 import { Product } from '../../types/products';
 import interpolate from '../../helpers/interpolate';
-import { handleLinkRoute, redirectTo } from '../../helpers/route';
+import { Router } from '../../helpers/router';
+import Cart from '../../helpers/cart';
 
 export default class ItemPage {
-  item: Product | null;
+  item: Product | null = null;
   mainContainerEl: HTMLElement;
+  cart: Cart
+  private router: Router;
 
-  constructor() {
-    this.item = null;
+  constructor(cart: Cart, router: Router) {
+    this.cart = cart;
+    this.router = router;
     this.mainContainerEl = document.querySelector('#root') as HTMLElement;
   }
 
@@ -20,34 +24,45 @@ export default class ItemPage {
     return data;
   };
 
-  async run(itemId: string) {
+  async run(itemId: string | null) {
+    if (!itemId) return
     this.item = await this.fetchProduct(itemId);
     document.title = this.item.title;
-    this.renderItem();
-    this.attachEvent();
+    this.render();
+    this.attachEvents();
   }
 
-  attachEvent() {
+  attachEvents() {
     const images = document.querySelectorAll('.item__image') as NodeList;
     images.forEach((image) => {
       image.addEventListener('click', () => this.showImage(image as HTMLImageElement))
     });
+
     const addToCartEl = document.querySelector('.item__add-to-cart') as HTMLElement
     addToCartEl.addEventListener('click', () => {
+      if (this.item && this.cart.inCart(this.item)) {
+        return this.router.redirectTo('/cart', 'Cart')
+      }
+      if (this.item) this.cart.add(this.item)
       addToCartEl.innerHTML = 'In cart  <span class="svg__add-to-cart"></span>'
     });
 
     const navBarLink = document.querySelector('.navbar__link') as HTMLLinkElement
-    navBarLink.addEventListener('click', handleLinkRoute)
+    navBarLink.addEventListener('click', (e) => this.router.handleLinkRoute(e))
 
-    const btnQuickBuy = document.querySelector('.btn__quick-buy')  as HTMLButtonElement
-    btnQuickBuy.addEventListener('click', () => redirectTo('http://localhost:8080/', 'cart'))
+    const btnQuickBuy = document.querySelector('.btn__quick-buy') as HTMLButtonElement
+    btnQuickBuy.addEventListener('click', () => this.router.redirectTo('/cart#checkout', 'cart'))
   }
 
-  renderItem() {
+  render() {
+    if (!this.item) return
     const template = document.querySelector('#item-template') as HTMLTemplateElement;
     console.log(this.mainContainerEl, template, this.item);
     this.mainContainerEl.innerHTML = interpolate(template.innerHTML, { item: this.item });
+    if (this.cart.inCart(this.item)) {
+      const addToCartEl = document.querySelector('.item__add-to-cart') as HTMLElement
+      addToCartEl.innerHTML = 'In cart <span class="svg__add-to-cart"></span>'
+    }
   }
 
   showImage(image: HTMLImageElement) {

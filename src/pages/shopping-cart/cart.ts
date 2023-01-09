@@ -1,15 +1,14 @@
-import { Products } from '../../types/cart';
+
 import { arrayRemove } from '../../helpers/utils';
 import { PromoNodes, PromoCodes } from '../../types/cart';
 import cartTemplate from './template';
 import { purchaseForm as purchase } from '../purchase-modal/purchase';
+import Cart, { CartItem } from '../../helpers/cart';
+import { Router } from '../../helpers/router';
 
-class Cart {
-  private _data: Products[] = [];
-  private _discount = 0;
+class CartPage {
   private _quantityCart = 0;
   private _queryFlag = true;
-  private _promo: string[] = [];
 
   private _cartItems: HTMLElement[] = [];
   private _subtotal!: HTMLDivElement;
@@ -17,26 +16,32 @@ class Cart {
   private _container!: HTMLOListElement;
   private _headerTotal!: HTMLSpanElement;
   private _headerCart!: HTMLSpanElement;
+  private cart: Cart;
+  private router: Router;
 
-  query(): boolean {
+  constructor(cart: Cart, router: Router) {
+    this.cart = cart;
+    this.router = router;
     this._total = document.querySelector('.totals__value') as HTMLDivElement;
     this._subtotal = document.querySelector('.subtotals__value') as HTMLDivElement;
     this._container = document.querySelector('.cart-item__list') as HTMLOListElement;
     this._headerTotal = document.querySelector('.cart__sum') as HTMLSpanElement;
     this._headerCart = document.querySelector('.cart__num') as HTMLSpanElement;
-    return false;
   }
 
-  draw(products: Products[]) {
-    if (this._queryFlag) {
-      this._queryFlag = this.query();
-      this.getLocalStorage(products);
+  async run() {
+    this.render();
+    console.log(window.location.hash)
+    if (window.location.hash === '#checkout') {
+      purchase()
     }
+  }
+
+  render() {
     const fragment = document.createDocumentFragment();
     const cartItemTemp = document.createElement('template');
     cartItemTemp.innerHTML = cartTemplate;
-
-    this._data.forEach((item, idx) => {
+    this.cart.getItems().forEach((item: CartItem, idx) => {
       item.quantity = item.quantity ? item.quantity : 1;
       const cartClone = cartItemTemp.content.cloneNode(true) as HTMLElement;
       const amount = cartClone.querySelector('.cart-item__amount') as HTMLSpanElement;
@@ -45,16 +50,16 @@ class Cart {
       const stock = cartClone.querySelector('.amount__name') as HTMLSpanElement;
       const total = cartClone.querySelector('.cart-item__total') as HTMLDivElement;
 
-      (cartClone.querySelector('.cart-item__image') as HTMLDivElement).style.backgroundImage = `url(${item.thumbnail})`;
+      (cartClone.querySelector('.cart-item__image') as HTMLDivElement).style.backgroundImage = `url(${item.product.thumbnail})`;
       (cartClone.querySelector('.cart-item__id') as HTMLTitleElement).textContent = `${idx + 1}`;
-      (cartClone.querySelector('.cart-item__title') as HTMLTitleElement).textContent = item.title;
-      (cartClone.querySelector('.brand__name') as HTMLTitleElement).textContent = item.brand;
-      (cartClone.querySelector('.cart-category__name') as HTMLSpanElement).textContent = item.category;
-      (cartClone.querySelector('.cart-item__price') as HTMLDivElement).textContent = `${item.price}`;
+      (cartClone.querySelector('.cart-item__title') as HTMLTitleElement).textContent = item.product.title;
+      (cartClone.querySelector('.brand__name') as HTMLTitleElement).textContent = item.product.brand;
+      (cartClone.querySelector('.cart-category__name') as HTMLSpanElement).textContent = item.product.category;
+      (cartClone.querySelector('.cart-item__price') as HTMLDivElement).textContent = `$${item.product.price.toFixed(2)}`;
 
       amount.textContent = `${item.quantity}`;
-      stock.textContent = `${item.stock}`;
-      total.textContent = `${item.price * item.quantity}`;
+      stock.textContent = `${item.product.stock}`;
+      total.textContent = `$${(item.product.price * item.quantity).toFixed(2)}`;
       this.updateItem(amount, stock, btnPlus, total, idx);
       this.updateItem(amount, stock, btnMinus, total, idx);
 
@@ -63,22 +68,22 @@ class Cart {
 
     this._container.innerHTML = '';
     this._container.appendChild(fragment);
-    this._quantityCart = this._data.reduce((accum, curr) => accum + curr.quantity, 0);
+    this._quantityCart = this.cart.getCount()
     this._headerCart.textContent = `${this._quantityCart}`;
+    const linkBackToHome = document.querySelector('.navbar__link')
+    linkBackToHome?.addEventListener('click', (e) => this.router.handleLinkRoute(e))
 
-    this.drawTotals();
+    this.renderTotals();
     this.applyPromo();
     this.pagination();
     this.purchaseModal();
-    this.setLocalStorage().data;
   }
 
-  drawTotals() {
+  renderTotals() {
     if (this._total && this._subtotal) {
-      let sum = this._data.reduce((accum, cur) => cur.price * cur.quantity + accum, 0);
-      this._subtotal.textContent = `$${sum}`;
-      if (this._discount) sum *= (100 - this._discount) / 100;
-      const totalSum = `$${sum.toFixed(0)}`;
+      const sum = this.cart.getSubTotal()
+      this._subtotal.textContent = `$${sum.toFixed(2)}`;
+      const totalSum = `$${this.cart.getTotal().toFixed(2)}`;
       this._total.textContent = totalSum;
       this._headerTotal.textContent = totalSum;
     }
@@ -94,41 +99,41 @@ class Cart {
     };
 
     const removeItem = (index: number): void => {
-      const cartItem = this._data[index];
+      const cartItem = this.cart.getItems()[index];
       const cartNode = this._cartItems[index];
       cartNode.remove();
       this._cartItems = arrayRemove(this._cartItems, cartNode);
-      this._data = arrayRemove(this._data, cartItem);
-      this.draw(this._data);
-      this.setLocalStorage().data;
-      const isDataNull = this._data.length;
+      this.cart.remove(cartItem.product)
+      this.render();
+      const isDataNull = this.cart.getItems().length;
       if (!isDataNull) removeCartContainer();
     };
 
     const updateData = () => {
-      if (!btn && !amount && !this._data[idx].quantity) return;
-      const item = this._data[idx];
-      if (item.stock && btn.classList.contains('btn-plus')) {
-        item.quantity += 1;
+      if (!btn && !amount && !this.cart.getItems()[idx].quantity) return;
+      const item = this.cart.getItems()[idx];
+      let quantity = item.quantity
+      if (item.product.stock && btn.classList.contains('btn-plus')) {
+        quantity += 1;
         this._quantityCart += 1;
         this._headerCart.textContent = `${this._quantityCart}`;
-        item.stock -= 1;
-        amount.textContent = `${item.quantity}`;
-        stock.textContent = `${item.stock}`;
-        total.textContent = `${item.price * item.quantity}`;
+        item.product.stock -= 1;
+        amount.textContent = `${quantity}`;
+        stock.textContent = `${item.product.stock}`;
+        total.textContent = `$${(item.product.price * quantity).toFixed(2)}`;
       }
-      if (item.quantity && btn.classList.contains('btn-minus')) {
-        item.quantity -= 1;
+      if (quantity && btn.classList.contains('btn-minus')) {
+        quantity -= 1;
         this._quantityCart -= 1;
         this._headerCart.textContent = `${this._quantityCart}`;
-        item.stock += 1;
-        if (item.quantity === 0) removeItem(idx);
-        amount.textContent = `${item.quantity}`;
-        stock.textContent = `${item.stock}`;
-        total.textContent = `${item.price * item.quantity}`;
+        item.product.stock += 1;
+        if (quantity === 0) removeItem(idx);
+        amount.textContent = `${quantity}`;
+        stock.textContent = `${item.product.stock}`;
+        total.textContent = `$${(item.product.price * quantity).toFixed(2)}`;
       }
-      this.drawTotals();
-      this.setLocalStorage().data;
+      this.cart.update(item.product, quantity)
+      this.renderTotals();
     };
     btn.addEventListener('click', updateData);
   }
@@ -151,30 +156,30 @@ class Cart {
         if (nodeAdd) nodeAdd[value].remove();
         const nodeDrop = showPromo(value, 'Drop');
         promoDropList.push({ [value]: nodeDrop });
-        this._promo = promoDropList.map((item) => Object.keys(item)[0]);
-        this.setLocalStorage().promo;
+        this.cart.addPromo(value as string)
         priceSubTotals.classList.add('line-through');
-        this._discount += promoData[value].discount;
-        this.drawTotals();
+        this.renderTotals();
       }
       if (type === 'Drop') {
         const nodeDrop = promoDropList.find((x) => x[value] instanceof HTMLElement);
         if (nodeDrop) {
           nodeDrop[value].remove();
           promoDropList = arrayRemove(promoDropList, nodeDrop);
-          this._promo = promoDropList.map((item) => Object.keys(item)[0]);
-          this.setLocalStorage().promo;
+          this.cart.removePromo(value as string)
         }
-        this._discount -= promoData[value].discount;
-        this.drawTotals();
+        this.renderTotals();
         handlePromo.apply(inputPromo);
-        if (this._discount === 0) priceSubTotals.classList.remove('line-through');
+        if (this.cart.getDiscount() === 0) {
+          priceSubTotals.classList.remove('line-through');
+        }
       }
     };
 
-    if (this._promo.length) {
-      this._promo.forEach((item) => {
-        setPromo(item, 'Add');
+    const cartPromo = this.cart.getPromoCodes()
+
+    if (cartPromo.length) {
+      cartPromo.forEach((code) => {
+        setPromo(code, 'Add');
       });
     }
 
@@ -277,30 +282,6 @@ class Cart {
     const buyBtn = document.querySelector('.btn__quick-buy') as HTMLButtonElement;
     buyBtn.addEventListener('click', purchase);
   }
-
-  setLocalStorage() {
-    return {
-      data: localStorage.setItem('rss-online-cart-data', JSON.stringify(this._data)),
-      promo: localStorage.setItem('rss-online-cart-promo', JSON.stringify(this._promo)),
-    };
-  }
-
-  getLocalStorage(products: Products[]) {
-    const localData = localStorage.getItem('rss-online-cart-data');
-    if (localData) {
-      const cartData = JSON.parse(localData);
-      if (cartData.length) {
-        this._data = cartData;
-      } else this._data = products;
-    }
-    const localPromo = localStorage.getItem('rss-online-cart-promo');
-    if (localPromo) {
-      const cartPromo = JSON.parse(localPromo);
-      if (cartPromo.length) {
-        this._promo = cartPromo;
-      }
-    }
-  }
 }
 
-export default Cart;
+export default CartPage;

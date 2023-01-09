@@ -21,7 +21,7 @@
       <ul class="item__navbar">
         <li><a href="#" class="navbar__link">STORE</a></li>
         <li><span class="separator">.</span></li>
-        <li><a href="#" class="navbar__link-current">Home</a></li>
+        <li><a href="#" class="navbar__link-current">HOME</a></li>
         <li><span class="separator">.</span></li>
       </ul>
     </section>
@@ -107,7 +107,7 @@
 
 </body>
 <template id="item-template">
-  <section class="home-products__item">
+  <section class="home-products__item" data-index="${index}">
     <a href="/item/${item.id}" class="home-item__image" style="background-image: url(${item.thumbnail})"></a>
     <div class="home-item__details">
       <a href="/item/${item.id}" class="home-item__title" title="${item.title}">${item.title}</a>
