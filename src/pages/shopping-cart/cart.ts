@@ -15,6 +15,7 @@ class CartPage {
   private _container!: HTMLOListElement;
   private _headerTotal!: HTMLSpanElement;
   private _headerCart!: HTMLSpanElement;
+  private mainEl: HTMLElement;
   private cart: Cart;
   private router: Router;
 
@@ -26,11 +27,15 @@ class CartPage {
     this._container = document.querySelector('.cart-item__list') as HTMLOListElement;
     this._headerTotal = document.querySelector('.cart__sum') as HTMLSpanElement;
     this._headerCart = document.querySelector('.cart__num') as HTMLSpanElement;
+    this.mainEl = document.querySelector('.main__content') as HTMLElement;
   }
 
   async run() {
+    if (!this.cart.getCount()) {
+      this.mainEl.innerHTML = `<h2 class="category__title">Cart is Empty</h2>`;
+      return
+    }
     this.render();
-    console.log(window.location.hash);
     if (window.location.hash === '#checkout') {
       purchase();
     }
@@ -94,11 +99,7 @@ class CartPage {
 
   updateItem(amount: HTMLSpanElement, stock: HTMLSpanElement, btn: HTMLDivElement, total: HTMLDivElement, idx: number) {
     const removeCartContainer = () => {
-      const root = document.getElementById('root') as HTMLDivElement;
-      root.style.textAlign = 'center';
-      root.style.fontSize = '2rem';
-      root.style.margin = '2rem auto';
-      root.innerHTML = `Cart is Empty`;
+      this.mainEl.innerHTML = `<h2 class="category__title">Cart is Empty</h2>`;
     };
 
     const removeItem = (index: number): void => {
@@ -233,7 +234,6 @@ class CartPage {
 
     let url = window.location.pathname;
     const params = new URLSearchParams(window.location.search);
-    const queryString = window.location.search;
 
     let paginationLimit = Number(params.get('limit'));
     if (!paginationLimit) paginationLimit = 5;
@@ -251,7 +251,7 @@ class CartPage {
       currentPage = pageNum;
       pageNumber.textContent = `${currentPage}`;
       url = `?page=${currentPage}&limit=${paginationLimit}`;
-      history.pushState({}, '', url);
+      //history.pushState({}, '', url);
       const prevRange = (pageNum - 1) * paginationLimit;
       const currRange = pageNum * paginationLimit;
       this._cartItems.forEach((item, index) => {
@@ -263,7 +263,6 @@ class CartPage {
     };
     const handleItemsLimit = () => {
       const value = Number(paginationNumbers.value.trim());
-      console.log(value);
       if (value && value < 10) {
         paginationLimit = value;
       } else {
@@ -278,7 +277,9 @@ class CartPage {
     prevBtn.addEventListener('click', () => setCurrentPage(currentPage - 1));
     nextBtn.addEventListener('click', () => setCurrentPage(currentPage + 1));
     paginationNumbers.addEventListener('change', handleItemsLimit);
-    handleItemsLimit();
+    if (window.location.search) {
+      handleItemsLimit();
+    }
   }
 
   purchaseModal() {

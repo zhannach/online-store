@@ -52,13 +52,16 @@ export default class ItemPage {
     navBarLink.addEventListener('click', (e) => this.router.handleLinkRoute(e));
 
     const btnQuickBuy = document.querySelector('.btn__quick-buy') as HTMLButtonElement;
-    btnQuickBuy.addEventListener('click', () => this.router.redirectTo('/cart#checkout', 'cart'));
+    btnQuickBuy.addEventListener('click', () => { 
+      if (this.item) this.cart.add(this.item);
+      this.router.redirectTo('/cart#checkout', 'cart')
+     
+    });
   }
 
   render() {
     if (!this.item) return;
     const template = document.querySelector('#item-template') as HTMLTemplateElement;
-    console.log(this.mainContainerEl, template, this.item);
     this.mainContainerEl.innerHTML = interpolate(template.innerHTML, { item: this.item });
     if (this.cart.inCart(this.item)) {
       const addToCartEl = document.querySelector('.item__add-to-cart') as HTMLElement;
