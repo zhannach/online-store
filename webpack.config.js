@@ -47,7 +47,7 @@ const baseConfig = {
       template: path.resolve(__dirname, './src/pages/products/products.html'),
       filename: './pages/products.html',
     }),
-      new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './src/pages/shopping-cart/cart.html'),
       filename: './pages/cart.html',
     }),

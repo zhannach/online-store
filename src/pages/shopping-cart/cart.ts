@@ -1,4 +1,3 @@
-
 import { arrayRemove } from '../../helpers/utils';
 import { PromoNodes, PromoCodes } from '../../types/cart';
 import cartTemplate from './template';
@@ -31,9 +30,9 @@ class CartPage {
 
   async run() {
     this.render();
-    console.log(window.location.hash)
+    console.log(window.location.hash);
     if (window.location.hash === '#checkout') {
-      purchase()
+      purchase();
     }
   }
 
@@ -50,12 +49,16 @@ class CartPage {
       const stock = cartClone.querySelector('.amount__name') as HTMLSpanElement;
       const total = cartClone.querySelector('.cart-item__total') as HTMLDivElement;
 
-      (cartClone.querySelector('.cart-item__image') as HTMLDivElement).style.backgroundImage = `url(${item.product.thumbnail})`;
+      (
+        cartClone.querySelector('.cart-item__image') as HTMLDivElement
+      ).style.backgroundImage = `url(${item.product.thumbnail})`;
       (cartClone.querySelector('.cart-item__id') as HTMLTitleElement).textContent = `${idx + 1}`;
       (cartClone.querySelector('.cart-item__title') as HTMLTitleElement).textContent = item.product.title;
       (cartClone.querySelector('.brand__name') as HTMLTitleElement).textContent = item.product.brand;
       (cartClone.querySelector('.cart-category__name') as HTMLSpanElement).textContent = item.product.category;
-      (cartClone.querySelector('.cart-item__price') as HTMLDivElement).textContent = `$${item.product.price.toFixed(2)}`;
+      (cartClone.querySelector('.cart-item__price') as HTMLDivElement).textContent = `$${item.product.price.toFixed(
+        2
+      )}`;
 
       amount.textContent = `${item.quantity}`;
       stock.textContent = `${item.product.stock}`;
@@ -68,10 +71,10 @@ class CartPage {
 
     this._container.innerHTML = '';
     this._container.appendChild(fragment);
-    this._quantityCart = this.cart.getCount()
+    this._quantityCart = this.cart.getCount();
     this._headerCart.textContent = `${this._quantityCart}`;
-    const linkBackToHome = document.querySelector('.navbar__link')
-    linkBackToHome?.addEventListener('click', (e) => this.router.handleLinkRoute(e))
+    const linkBackToHome = document.querySelector('.navbar__link');
+    linkBackToHome?.addEventListener('click', (e) => this.router.handleLinkRoute(e));
 
     this.renderTotals();
     this.applyPromo();
@@ -81,7 +84,7 @@ class CartPage {
 
   renderTotals() {
     if (this._total && this._subtotal) {
-      const sum = this.cart.getSubTotal()
+      const sum = this.cart.getSubTotal();
       this._subtotal.textContent = `$${sum.toFixed(2)}`;
       const totalSum = `$${this.cart.getTotal().toFixed(2)}`;
       this._total.textContent = totalSum;
@@ -103,7 +106,7 @@ class CartPage {
       const cartNode = this._cartItems[index];
       cartNode.remove();
       this._cartItems = arrayRemove(this._cartItems, cartNode);
-      this.cart.remove(cartItem.product)
+      this.cart.remove(cartItem.product);
       this.render();
       const isDataNull = this.cart.getItems().length;
       if (!isDataNull) removeCartContainer();
@@ -112,7 +115,7 @@ class CartPage {
     const updateData = () => {
       if (!btn && !amount && !this.cart.getItems()[idx].quantity) return;
       const item = this.cart.getItems()[idx];
-      let quantity = item.quantity
+      let quantity = item.quantity;
       if (item.product.stock && btn.classList.contains('btn-plus')) {
         quantity += 1;
         this._quantityCart += 1;
@@ -132,7 +135,7 @@ class CartPage {
         stock.textContent = `${item.product.stock}`;
         total.textContent = `$${(item.product.price * quantity).toFixed(2)}`;
       }
-      this.cart.update(item.product, quantity)
+      this.cart.update(item.product, quantity);
       this.renderTotals();
     };
     btn.addEventListener('click', updateData);
@@ -156,7 +159,7 @@ class CartPage {
         if (nodeAdd) nodeAdd[value].remove();
         const nodeDrop = showPromo(value, 'Drop');
         promoDropList.push({ [value]: nodeDrop });
-        this.cart.addPromo(value as string)
+        this.cart.addPromo(value as string);
         priceSubTotals.classList.add('line-through');
         this.renderTotals();
       }
@@ -165,7 +168,7 @@ class CartPage {
         if (nodeDrop) {
           nodeDrop[value].remove();
           promoDropList = arrayRemove(promoDropList, nodeDrop);
-          this.cart.removePromo(value as string)
+          this.cart.removePromo(value as string);
         }
         this.renderTotals();
         handlePromo.apply(inputPromo);
@@ -175,7 +178,7 @@ class CartPage {
       }
     };
 
-    const cartPromo = this.cart.getPromoCodes()
+    const cartPromo = this.cart.getPromoCodes();
 
     if (cartPromo.length) {
       cartPromo.forEach((code) => {

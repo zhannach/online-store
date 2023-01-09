@@ -6,7 +6,7 @@ import Cart from '../../helpers/cart';
 export default class ItemPage {
   item: Product | null = null;
   mainContainerEl: HTMLElement;
-  cart: Cart
+  cart: Cart;
   private router: Router;
 
   constructor(cart: Cart, router: Router) {
@@ -25,7 +25,8 @@ export default class ItemPage {
   };
 
   async run(itemId: string | null) {
-    if (!itemId) return
+    console.log(itemId);
+    if (!itemId) return;
     this.item = await this.fetchProduct(itemId);
     document.title = this.item.title;
     this.render();
@@ -35,33 +36,33 @@ export default class ItemPage {
   attachEvents() {
     const images = document.querySelectorAll('.item__image') as NodeList;
     images.forEach((image) => {
-      image.addEventListener('click', () => this.showImage(image as HTMLImageElement))
+      image.addEventListener('click', () => this.showImage(image as HTMLImageElement));
     });
 
-    const addToCartEl = document.querySelector('.item__add-to-cart') as HTMLElement
+    const addToCartEl = document.querySelector('.item__add-to-cart') as HTMLElement;
     addToCartEl.addEventListener('click', () => {
       if (this.item && this.cart.inCart(this.item)) {
-        return this.router.redirectTo('/cart', 'Cart')
+        return this.router.redirectTo('/cart', 'Cart');
       }
-      if (this.item) this.cart.add(this.item)
-      addToCartEl.innerHTML = 'In cart  <span class="svg__add-to-cart"></span>'
+      if (this.item) this.cart.add(this.item);
+      addToCartEl.innerHTML = 'In cart  <span class="svg__add-to-cart"></span>';
     });
 
-    const navBarLink = document.querySelector('.navbar__link') as HTMLLinkElement
-    navBarLink.addEventListener('click', (e) => this.router.handleLinkRoute(e))
+    const navBarLink = document.querySelector('.navbar__link') as HTMLLinkElement;
+    navBarLink.addEventListener('click', (e) => this.router.handleLinkRoute(e));
 
-    const btnQuickBuy = document.querySelector('.btn__quick-buy') as HTMLButtonElement
-    btnQuickBuy.addEventListener('click', () => this.router.redirectTo('/cart#checkout', 'cart'))
+    const btnQuickBuy = document.querySelector('.btn__quick-buy') as HTMLButtonElement;
+    btnQuickBuy.addEventListener('click', () => this.router.redirectTo('/cart#checkout', 'cart'));
   }
 
   render() {
-    if (!this.item) return
+    if (!this.item) return;
     const template = document.querySelector('#item-template') as HTMLTemplateElement;
     console.log(this.mainContainerEl, template, this.item);
     this.mainContainerEl.innerHTML = interpolate(template.innerHTML, { item: this.item });
     if (this.cart.inCart(this.item)) {
-      const addToCartEl = document.querySelector('.item__add-to-cart') as HTMLElement
-      addToCartEl.innerHTML = 'In cart <span class="svg__add-to-cart"></span>'
+      const addToCartEl = document.querySelector('.item__add-to-cart') as HTMLElement;
+      addToCartEl.innerHTML = 'In cart <span class="svg__add-to-cart"></span>';
     }
   }
 

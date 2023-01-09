@@ -187,17 +187,17 @@ export default class ProductsPage {
     });
     this.allProductsContainer.querySelectorAll('.home-products__item').forEach((item, index) => {
       // const index = Number(item.getAttribute('data-index'))
-      const product = this.filteredProducts[index]
+      const product = this.filteredProducts[index];
       const addBtn = item.querySelector('.home-btn__add');
       if (addBtn && this.cart.inCart(product)) {
         addBtn.className = 'home-btn__add in-cart';
       }
       addBtn?.addEventListener('click', () => {
         if (this.cart.inCart(product)) {
-          return this.router.redirectTo('/cart')
+          return this.router.redirectTo('/cart');
         }
         addBtn.classList.add('in-cart');
-        this.cart.add(product)
+        this.cart.add(product);
       });
     });
   }
@@ -359,7 +359,7 @@ export default class ProductsPage {
   }
 
   parseUrl() {
-    const queryString = window.location.search
+    const queryString = window.location.search;
     const query: Map<string, string> = new Map();
     const pairs = (queryString[0] === '?' ? queryString.slice(1) : queryString).split('&');
     for (let i = 0; i < pairs.length; i++) {
@@ -387,8 +387,5 @@ export default class ProductsPage {
     if (query.get('sort')) {
       this.sortSelectEl.value = query.get('sort') as string;
     }
-  }
-
-  addProductToCart() {
   }
 }

@@ -1,43 +1,41 @@
 export type Route = {
   path: string | RegExp;
   template: string;
-  action?: (router: Router, matched?: string[] | boolean | null) => void
-}
+  action?: (router: Router, matched?: string[] | boolean | null) => void;
+};
 
 export class Router {
-  private routes: Route[]
-  private rootEl: HTMLDivElement
-  private errorTemplate: string
+  private routes: Route[];
+  private rootEl: HTMLDivElement;
+  private errorTemplate: string;
 
   constructor(routes: Route[], rootEl: HTMLDivElement, errorTmpl: string) {
-    this.routes = routes
-    this.rootEl = rootEl
-    this.errorTemplate = errorTmpl
-    this.initEvents()
+    this.routes = routes;
+    this.rootEl = rootEl;
+    this.errorTemplate = errorTmpl;
+    this.initEvents();
   }
 
   async handleLocation() {
     const path = window.location.pathname;
-    let matchedRoute: Route | null = null
+    let matchedRoute: Route | null = null;
+    let matchedPath = null;
     for (const route of this.routes) {
-      let matched = null
       // if path is regexp
       if (typeof route.path !== 'string') {
-        matched = path.match(route.path)
+        matchedPath = path.match(route.path);
       } else {
-        matched = path === route.path
+        matchedPath = path === route.path;
       }
-      if (matched) {
-        matchedRoute = route
+      if (matchedPath) {
+        matchedRoute = route;
         break;
       }
     }
-    const html = await fetch(
-      matchedRoute ? matchedRoute.template : this.errorTemplate
-    ).then((data) => data.text());
+    const html = await fetch(matchedRoute ? matchedRoute.template : this.errorTemplate).then((data) => data.text());
     this.rootEl.innerHTML = html;
     if (matchedRoute && matchedRoute.action) {
-      matchedRoute.action(this)
+      matchedRoute.action(this, matchedPath);
     }
   }
 
@@ -49,7 +47,7 @@ export class Router {
     }
   }
 
-  redirectTo(link: string, title: string = '') {
+  redirectTo(link: string, title = '') {
     history.pushState({}, title, link);
     this.handleLocation();
   }
