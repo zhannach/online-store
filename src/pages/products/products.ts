@@ -204,8 +204,8 @@ export default class ProductsPage {
 
   renderFilterSidebar() {
     this.filters.forEach((filter) => {
+      const filteredProducts = this.filterProducts(filter.name);
       if (filter.type === FilterType.Checkbox) {
-        const filteredProducts = this.filterProducts(filter.name);
         const listEl = filter.element.querySelector('.filter-list') as HTMLDivElement;
         filter.options.forEach((option) => {
           const element = document.createElement('div');
@@ -219,12 +219,20 @@ export default class ProductsPage {
           listEl.appendChild(element);
         });
       } else if (filter.type === FilterType.Range) {
+        const options = filteredProducts.map((p) => p[filter.name as keyof Product]) as number[]
+        const min = Math.min(...options);
+        const max = Math.max(...options);
         const minValue = Math.min(...(filter.options as Set<number>));
         const maxValue = Math.max(...(filter.options as Set<number>));
         const minInput = filter.element.querySelector('.input__min') as HTMLInputElement;
         const maxInput = filter.element.querySelector('.input__max') as HTMLInputElement;
-        minInput.value = filter.values[0] ? filter.values[0].toString() : minValue.toString();
-        maxInput.value = filter.values[1] ? filter.values[1].toString() : maxValue.toString();
+        const values = filter.values || [min, max]
+        if (values[0] < min) values[0] = min
+        if (values[1] > max) values[1] = max
+        if (values[0] > max) values[0] = max
+        if (values[1] < min) values[1] = min
+        minInput.value = values[0] ? values[0].toString() : min.toString();
+        maxInput.value = values[1] ? values[1].toString() : max.toString();
         rangeSliderInit({
           parentEl: filter.element,
           sliderSelector: '.filter-multi-input',
@@ -251,8 +259,8 @@ export default class ProductsPage {
       return filter;
     });
     this.filters.forEach((filter) => {
+      const filteredProducts = this.filterProducts(filter.name);
       if (filter.type === FilterType.Checkbox) {
-        const filteredProducts = this.filterProducts(filter.name);
         const listEl = filter.element.querySelector('.filter-list') as HTMLDivElement;
         let index = 0;
         filter.options.forEach((option) => {
@@ -262,6 +270,17 @@ export default class ProductsPage {
           if (counter) counter.innerHTML = `${countFiltered}/${countAll}`;
           index++;
         });
+      } else if (filter.type === FilterType.Range) {
+        const options = filteredProducts.map((p) => p[filter.name as keyof Product]) as number[]
+        const input = filter.element.querySelector('.filter-multi-input') as target;
+        const min = Math.min(...options);
+        const max = Math.max(...options);
+        const values = [...filter.values]
+        if (values[0] < min) values[0] = min
+        if (values[1] > max) values[1] = max
+        if (values[0] > max) values[0] = max
+        if (values[1] < min) values[1] = min
+        input.noUiSlider?.set(values)
       }
     });
     this.filteredProducts = this.filterProducts();

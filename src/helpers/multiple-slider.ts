@@ -52,7 +52,6 @@ export default function rangeSliderInit({
   });
 
   range.noUiSlider?.on('change', function (values: (number | string)[], handleNumber: number) {
-    console.log(values);
     inputs[handleNumber].value = Number(values[handleNumber]).toFixed(0);
     if (callback) callback();
   });
