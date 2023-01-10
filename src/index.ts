@@ -30,24 +30,24 @@ import CartPage from './pages/shopping-cart/cart';
   const routes: Route[] = [
     {
       path: '/',
-      template: '/pages/products.html',
-      action: (router) => {
-        new ProductsPage(cart, router).run();
+      src: '/pages/products.html',
+      action: async (router) => {
+        await new ProductsPage(cart, router).run();
       },
     },
     {
       path: /^\/item\/([0-9]+)$/i,
-      template: '/pages/item.html',
-      action: (router, matched) => {
+      src: '/pages/item.html',
+      action: async (router, matched) => {
         const itemId = typeof matched === 'object' && matched?.length ? matched[1] : null;
-        new ItemPage(cart, router).run(itemId);
+        await new ItemPage(cart, router).run(itemId);
       },
     },
     {
       path: '/cart',
-      template: '/pages/cart.html',
-      action: (router) => {
-        new CartPage(cart, router).run();
+      src: '/pages/cart.html',
+      action: async (router) => {
+        await new CartPage(cart, router).run();
       },
     },
   ];
