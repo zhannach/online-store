@@ -126,7 +126,7 @@ export const purchaseForm = () => {
       }
     }
     const isAllInputsValid = validInputs.every((x) => x);
-    if (!isAllInputsValid) return;
+    if (isAllInputsValid) return;
     let i = 2;
     const timerId = setInterval(() => {
       modal.innerHTML = `<h2 class="order-complete">Your order is complete. Redirect to main page ${i}</h2>`;
@@ -136,6 +136,7 @@ export const purchaseForm = () => {
     setTimeout(() => {
       clearInterval(timerId);
       modal.remove();
+      localStorage.clear();
       const url = window.location.origin;
       window.location.replace(url);
     }, 4000);
