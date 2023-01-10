@@ -1,0 +1,255 @@
+/* Global */
+
+:root {
+  --pink: #f8f8fd;
+  --white: #e7e7e7;
+  --white-gray: #cdcedc;
+  --gray: rgba(242, 242, 242, 0.7);
+  --gray-dark: #5e6977;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --green : #2ECC71;;
+  --green-dark : #27AE60;
+  --red: #FB2E86;
+}
+
+/* Modal window, purchase cart & form*/
+
+.modal {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.purchase-cart {
+  display: flex;
+  justify-content: center;
+}
+
+.purchase-form {
+  width: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  border: none;
+}
+
+/* Credit Card, Person  */
+
+.person-details,
+.credit-card {
+  width: 360px;
+  background-color: var(--pink);
+  border-radius: 6px;
+  border: 1px solid var(--white-gray);
+  box-shadow: 1px 2px 3px 0px var(--shadow);
+}
+
+.person-details {
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.credit-card {
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.person-header,
+.card-header {
+  height: 60px;
+  padding: 20px 30px 0;
+}
+
+.person-details,
+.credit-card {
+  padding: 20px 20px;
+}
+
+@media screen and (max-width: 719px) {
+
+  .person-details,
+  .credit-card {
+    border-radius: 6px;
+    border: 1px solid var(--white-gray);
+  }
+
+  .person-details {
+    border-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .credit-card {
+    border-bottom: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+}
+/* Title */
+
+.title {
+  margin: 0;
+  color: var(--gray-dark);
+  font-size: 18px;
+}
+
+/* Common */
+
+.input__container label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.person-cvv,
+.person-exp,
+.person-name,
+.person-phone,
+.person-number,
+.person-address,
+.person-email {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.form-input,
+.proceed-btn{
+  height: 42px;
+}
+
+.form-input{
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+.form-input::placeholder{
+  color: var(--gray-dark);
+  opacity: 0.7;
+}
+
+.error {
+  color: var(--red);
+  align-self: center;
+  margin-bottom: 15px;
+  font-size: 1.25rem;
+}
+
+/* Card Number */
+
+.form-input {
+  width: 100%;
+  margin-bottom: 20px;
+  border: 2px solid var(--white-gray);
+  border-radius: 6px;
+  outline: none;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.address-input,
+.email-input,
+.phone-input,
+.name-input {
+  padding-left: 20px;
+}
+
+.form-input:focus {
+  border: 3px solid var(--green);
+}
+
+.card-input {
+  letter-spacing: 2px;
+  padding-left: 25px;
+}
+
+.card-ico__container {
+  width: 100%;
+  position: relative;
+}
+
+.card-icon {
+  position: absolute;
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  right: 5px;
+  bottom: 24px;
+  background-image: url(../image/card.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Card Verification Field */
+
+.card-verification {
+  display       : flex;
+  flex-wrap     : nowrap;
+  gap           : 2rem;
+  margin-bottom : 0.5rem;
+}
+
+.exp-input,
+.cvv-input {
+  width         : 100%;
+  text-align    : center;
+  padding-left  : 0;
+  border        : 2px solid var(--white-gray);
+  border-radius : 6px;
+  background    : #fff;
+  letter-spacing: 4px;
+
+}
+
+.cvv-input::placeholder {
+  text-align:center;
+}
+
+/* Buttons Section */
+
+.proceed-btn {
+  cursor: pointer;
+  width: 100%;
+  border-color: transparent;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.proceed-btn {
+  margin-bottom: 10px;
+  background: var(--green);
+}
+
+.proceed-btn:hover {
+  color: var(--gray);
+  background: var(--green-dark);
+  outline: none;
+  transition: all 0.3s linear;
+}
+
+.proceed-btn {
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--white)
+}
+
+.order-complete {
+  padding: 2rem 4rem;
+  color: #101750;
+  font-size: 1.5rem;
+  font-weight: 600;
+  background-color: var(--pink);
+  border-radius: 6px;
+  border: 1px solid var(--white-gray);
+  box-shadow: 1px 2px 3px 0px var(--shadow);
+}

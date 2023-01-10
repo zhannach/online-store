@@ -1,0 +1,51 @@
+
+<template id="item-template">
+  <section class="category">
+    <h2 class="category__title">Product Details</h2>
+    <ul class="item__navbar">
+      <li><a href="/" class="navbar__link">STORE</a></li>
+      <li><span class="separator">.</span></li>
+      <li><span class="navbar__link">${item.category.toUpperCase()}</span></li>
+      <li><span class="separator">.</span></li>
+      <li><span class="navbar__link">${item.brand.toUpperCase()}</span></li>
+      <li><span class="separator">.</span></li>
+      <li><span class="navbar__link-current">${item.title.toUpperCase()}</span></li>
+    </ul>
+  </section>
+  <section class="item">
+    <div class="item__images">
+      <div class="item__image-slider">
+        <div class="item__image" style="background-image: url(${item.images[0]})"></div>
+        <div class="item__image" style="background-image: url(${item.images[1]})"></div>
+        <div class="item__image" style="background-image: url(${item.images[2]})"></div>
+      </div>
+      <div class="item__image-main" style="background-image: url(${item.thumbnail})"></div>
+    </div>
+    <section class="item__details">
+      <h3 class="item__title">${item.title}</h3>
+      <div class="item__detail">
+        <div class="count__value">$${item.price}</div>
+      </div>
+      <div class="item__detail">
+        Brand:
+        <span class="brend__name">${item.brand}</span>
+      </div>
+      <div class="item__detail">
+        Category:
+        <span class="category__name">${item.category}</span>
+      </div>
+      <div class="item__add-to-cart">Add to cart
+        <span class="svg__add-to-cart"></span>
+      </div>
+      <div class="item__detail">
+        Description:
+        <span class="description__text">${item.description}</span>
+      </div>
+      <div class="item__detail">
+        Stock:
+        <span class="amount__name">${item.stock}</span>
+      </div>
+      <button class="btn btn__quick-buy">Buy now</button>
+    </section>
+  </section>
+</template>
