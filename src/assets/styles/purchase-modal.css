@@ -242,3 +242,14 @@
   cursor: pointer;
   color: var(--white)
 }
+
+.order-complete {
+  padding: 2rem 4rem;
+  color: #101750;
+  font-size: 1.5rem;
+  font-weight: 600;
+  background-color: var(--pink);
+  border-radius: 6px;
+  border: 1px solid var(--white-gray);
+  box-shadow: 1px 2px 3px 0px var(--shadow);
+}

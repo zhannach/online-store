@@ -15,8 +15,9 @@ export const purchaseForm = () => {
   const root = document.getElementById('root') as HTMLDivElement;
   const purchaseTemp = document.createElement('template') as HTMLTemplateElement;
   purchaseTemp.innerHTML = purchaseTemplate;
-  const purchaseClone = purchaseTemp.content.cloneNode(true) as HTMLElement;
 
+  const purchaseClone = purchaseTemp.content.cloneNode(true) as HTMLElement;
+  const modal = purchaseClone.querySelector('.modal') as HTMLDivElement;
   const spanIcon = purchaseClone.querySelector('.card-icon') as HTMLInputElement;
 
   const inputs: Inputs = {
@@ -55,8 +56,8 @@ export const purchaseForm = () => {
   inputs.exp.addEventListener('keyup', handleExpiry);
 
   const validateFlags: Flags = {
-    name: function (): boolean {
-      const value = inputs.name.value.trim().split(' ');
+    name: function (input: string): boolean {
+      const value = input.split(' ');
       if (value.length < 2) return false;
       const result = value.reduce((pv, cv) => {
         if (cv.length >= 3) return pv + 1;
@@ -65,8 +66,8 @@ export const purchaseForm = () => {
       return result >= 2 ? true : false;
     },
 
-    phone: function (): boolean {
-      let value = inputs.phone.value.trim();
+    phone: function (input: string): boolean {
+      let value = input;
       if (value.length < 10) return false;
       if (value[0] !== '+') return false;
       value = value.slice(1);
@@ -74,8 +75,8 @@ export const purchaseForm = () => {
       return regexp.test(value);
     },
 
-    address: function (): boolean {
-      const value = inputs.address.value.trim().split(' ');
+    address: function (input: string): boolean {
+      const value = input.split(' ');
       if (value.length < 3) return false;
       const result = value.reduce((pv, cv) => {
         if (cv.length >= 5) return pv + 1;
@@ -84,35 +85,37 @@ export const purchaseForm = () => {
       return result >= 3 ? true : false;
     },
 
-    email: function (): boolean {
-      const value = inputs.email.value.trim().toLocaleLowerCase();
+    email: function (input: string): boolean {
+      const value = input.toLocaleLowerCase();
       const regexp = new RegExp(/\S+@\S+\.\S+/);
       return regexp.test(value);
     },
 
-    number: function (): boolean {
-      const value = inputs.number.value;
+    number: function (input: string): boolean {
+      const value = input;
       const regexp = new RegExp(/^[0-9]{16}$/);
       return regexp.test(value);
     },
 
-    exp: function (): boolean {
-      const value = inputs.exp.value;
+    exp: function (input: string): boolean {
+      const value = input;
       const regexp = new RegExp(/^(0[1-9]|1[0-2])\/?([0-9]{2})$/);
       return regexp.test(value);
     },
 
-    cvv: function (): boolean {
-      const value = inputs.cvv.value;
+    cvv: function (input: string): boolean {
+      const value = input;
       const regexp = new RegExp(/^[0-9]{3}$/);
       return regexp.test(value);
     },
   };
 
   function handleValidation(this: HTMLInputElement) {
+    const validInputs: boolean[] = [];
     for (const key in validateFlags) {
       const errorDiv = document.querySelector(`.person-${key} .error`) as HTMLDivElement;
-      const valid = validateFlags[key]();
+      const valid = validateFlags[key](inputs[key].value.trim());
+      validInputs.push(valid);
       if (!valid && !errorDiv) {
         const container = document.querySelector(`.person-${key}`) as HTMLDivElement;
         const errorMsg = `<div class="error">Error</div>`;
@@ -122,6 +125,20 @@ export const purchaseForm = () => {
         errorDiv.remove();
       }
     }
+    const isAllInputsValid = validInputs.every((x) => x);
+    if (!isAllInputsValid) return;
+    let i = 2;
+    const timerId = setInterval(() => {
+      modal.innerHTML = `<h2 class="order-complete">Your order is complete. Redirect to main page ${i}</h2>`;
+      i -= 1;
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(timerId);
+      modal.remove();
+      const url = window.location.origin;
+      window.location.replace(url);
+    }, 4000);
   }
 
   function handleModal(event: MouseEvent) {
@@ -129,7 +146,6 @@ export const purchaseForm = () => {
     const isClose = target.classList.contains('modal');
     if (isClose) modal.remove();
   }
-  const modal = purchaseClone.querySelector('.modal') as HTMLDivElement;
   modal.addEventListener('click', (event) => handleModal(event));
 
   purchaseClone.querySelector<HTMLInputElement>('.proceed-btn')?.addEventListener('click', handleValidation);

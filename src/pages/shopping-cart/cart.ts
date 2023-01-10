@@ -33,7 +33,7 @@ class CartPage {
   async run() {
     if (!this.cart.getCount()) {
       this.mainEl.innerHTML = `<h2 class="category__title">Cart is Empty</h2>`;
-      return
+      return;
     }
     this.render();
     if (window.location.hash === '#checkout') {

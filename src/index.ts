@@ -59,6 +59,6 @@ import CartPage from './pages/shopping-cart/cart';
 
   const titleStore = document.querySelector('.header__name');
   titleStore?.addEventListener('click', (e) => router.handleLinkRoute(e));
-  const cartLink = document.querySelector('.cart__num-link');
+  const cartLink = document.querySelector('.header__cart');
   cartLink?.addEventListener('click', (e) => router.handleLinkRoute(e));
 })();

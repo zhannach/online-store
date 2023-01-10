@@ -1,7 +1,7 @@
 export type Nullable<T> = T | null;
 
 export type Flags = {
-  [key: string]: () => boolean;
+  [key: string]: (input: string) => boolean;
 };
 
 export type Inputs = {
