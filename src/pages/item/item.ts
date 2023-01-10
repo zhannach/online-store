@@ -25,9 +25,10 @@ export default class ItemPage {
   };
 
   async run(itemId: string | null) {
-    console.log(itemId);
-    if (!itemId) return;
-    this.item = await this.fetchProduct(itemId);
+    this.item = itemId ? await this.fetchProduct(itemId) : null;
+    if (!this.item) {
+      throw new Error('Product not found!')
+    }
     document.title = this.item.title;
     this.render();
     this.attachEvents();

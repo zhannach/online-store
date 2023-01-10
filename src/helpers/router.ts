@@ -1,42 +1,59 @@
 export type Route = {
   path: string | RegExp;
-  template: string;
-  action?: (router: Router, matched?: string[] | boolean | null) => void;
+  src: string;
+  action?: (router: Router, matched?: string[] | boolean | null) => Promise<void>;
 };
 
 export class Router {
   private routes: Route[];
   private rootEl: HTMLDivElement;
-  private errorTemplate: string;
+  private errorSrc: string;
+  private errorHTML: string = '';
 
-  constructor(routes: Route[], rootEl: HTMLDivElement, errorTmpl: string) {
+  constructor(routes: Route[], rootEl: HTMLDivElement, errorSrc: string) {
     this.routes = routes;
     this.rootEl = rootEl;
-    this.errorTemplate = errorTmpl;
+    this.errorSrc = errorSrc;
     this.initEvents();
   }
 
   async handleLocation() {
     const path = window.location.pathname;
-    let matchedRoute: Route | null = null;
-    let matchedPath = null;
     for (const route of this.routes) {
+      let matched = null;
       // if path is regexp
       if (typeof route.path !== 'string') {
-        matchedPath = path.match(route.path);
+        matched = path.match(route.path);
       } else {
-        matchedPath = path === route.path;
+        matched = path === route.path;
       }
-      if (matchedPath) {
-        matchedRoute = route;
-        break;
+      if (matched) {
+        return await this.render(route, matched)
       }
     }
-    const html = await fetch(matchedRoute ? matchedRoute.template : this.errorTemplate).then((data) => data.text());
+    return await this.renderError()
+  }    
+
+  async render(route: Route, matched: string[] | boolean | null) {
+    const html = await fetch(route.src).then((data) => data.text());
     this.rootEl.innerHTML = html;
-    if (matchedRoute && matchedRoute.action) {
-      matchedRoute.action(this, matchedPath);
+    if (route.action) {
+      try {
+        await route.action(this, matched);
+      } catch(e) {
+        await this.renderError((e as Error).message)
+      }
     }
+  }
+
+  async renderError(title?: string) {
+    if (!this.errorHTML) {
+      this.errorHTML = await fetch(this.errorSrc).then((data) => data.text());
+    }
+    if (title) {
+      document.title = title
+    }
+    this.rootEl.innerHTML = this.errorHTML;
   }
 
   handleLinkRoute(event: Event) {
